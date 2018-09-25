@@ -5,7 +5,7 @@ var geometry, material, mesh;
 function addTableLeg(obj, x, y, z) {
     'use strict';
 
-    geometry = new THREE.CylinderGeometry(2, 2, 6);
+    geometry = new THREE.CylinderGeometry(2, 2, 26);
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y - 3, z);
     obj.add(mesh);
@@ -27,10 +27,10 @@ function createTable(x, y, z) {
     material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 
     addTableTop(table, 0, 0, 0);
-    addTableLeg(table, -25, -1, -8);
-    addTableLeg(table, -25, -1, 8);
-    addTableLeg(table, 25, -1, 8);
-    addTableLeg(table, 25, -1, -8);
+    addTableLeg(table, -25, -11, -8);
+    addTableLeg(table, -25, -11, 8);
+    addTableLeg(table, 25, -11, 8);
+    addTableLeg(table, 25, -11, -8);
 
     scene.add(table);
 
