@@ -24,7 +24,7 @@ function createTable(x, y, z) {
 
     var table = new THREE.Object3D();
 
-    material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 
     addTableTop(table, 0, 0, 0);
     addTableLeg(table, -25, -1, -8);
@@ -44,6 +44,7 @@ function addLampBottom(obj, x, y, z) {
   'use strict';
 
   geometry = new THREE.ConeGeometry(4, 25, 15);
+  material = new THREE.MeshBasicMaterial({ color: 0xffff00 , wireframe: true });
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
   obj.add(mesh);
@@ -52,6 +53,7 @@ function addLampBottom(obj, x, y, z) {
 function addLampMiddle(obj, x, y, z){
   'use strict';
   geometry = new THREE.SphereGeometry(2.5, 10, 10);
+  material = new THREE.MeshBasicMaterial({ color: 0xffffff , wireframe: true });
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y + 10, z);
   obj.add(mesh);
@@ -60,6 +62,7 @@ function addLampMiddle(obj, x, y, z){
 function addLampTop(obj, x, y, z){
   'use strict';
   geometry = new THREE.CylinderGeometry(4, 4, 5, 15);
+  material = new THREE.MeshBasicMaterial({ color: 0xffff00 , wireframe: true });
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y + 14, z);
   obj.add(mesh);
@@ -69,8 +72,6 @@ function createLamp(x, y, z){
   'use strict';
 
   var lamp = new THREE.Object3D();
-
-  material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 
   addLampBottom(lamp, 0, 0, 0);
   addLampMiddle(lamp, 0, 0, 0);
@@ -108,13 +109,28 @@ function addChairBack(obj, x, y, z) {
     obj.add(mesh);
 }
 
-function addChairFoot(obj, x, y, z){
+function addChairFoot1(obj, x, y, z){
   'use strict';
   geometry = new THREE.CubeGeometry(2, 2, 15);
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
   obj.add(mesh);
-  mesh.rotateY( Math.PI / 2 );
+}
+
+function addChairFoot2(obj, x, y, z){
+  'use strict';
+  geometry = new THREE.CubeGeometry(15, 2, 2);
+  mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(x, y, z);
+  obj.add(mesh);
+}
+
+function addWheels(obj, x, y, z) {
+  'use strict';
+  geometry = new THREE.TorusGeometry(2, 1, 10);
+  mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(x, y, z);
+  obj.add(mesh);
 }
 
 function createChair(x, y, z) {
@@ -127,9 +143,15 @@ function createChair(x, y, z) {
     addChairSeat(chair, 0, 0, 0);
     addChairBack(chair, 0, 10, 10);
     addChairLeg(chair, 0, -10, 0);
-    addChairFoot(chair, 7, -20, 0);
-    addChairFoot(chair, -7, -20, 0, mesh.rotateZ( Math.PI / 2 ));
-    
+    addChairFoot1(chair, 0, -20, 7);
+    addChairFoot1(chair, 0, -20, -7);
+    addChairFoot2(chair, 7, -20, 0);
+    addChairFoot2(chair, -7, -20, 0);
+    addWheels(chair, 0, -20, 15);
+    addWheels(chair, 0, -20, -15);
+    addWheels(chair, 15, -20, 0);
+    addWheels(chair, -15, -20, 0);
+
     scene.add(chair);
 
     chair.position.x = x;
@@ -161,7 +183,25 @@ function createCamera() {
     camera.position.y = 50;
     camera.position.z = 50;
     camera.lookAt(scene.position);
+
 }
+/*
+function onKey(cam){
+  'use strict';
+  cam = new THREE.PerspectiveCamera(70,
+                                       window.innerWidth / window.innerHeight,
+                                       1,
+                                       1000);
+  switch (cam.keyCode) {
+  case 97: //1
+  case 97: //1
+      cam.position.set( 50, 50, 50);
+      cam.lookAt(scene.position);
+      render();
+      break;
+  }
+}
+*/
 
 function onKeyDown(e) {
     'use strict';
@@ -214,6 +254,7 @@ function init() {
 
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
+    window.addEventListener("key", onKey);
 }
 
 function animate() {
