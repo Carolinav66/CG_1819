@@ -43,25 +43,25 @@ function createTable(x, y, z) {
 function addLampBottom(obj, x, y, z) {
   'use strict';
 
-  geometry = new THREE.ConeGeometry(5, 10, 5);
-  mesh = new THREE.Mesh(geometry, material);
-  mesh.position.set(x, y -10, z);
-  obj.add(mesh);
-}
-
-function addLampMiddle(obj, x, y, z){
-  'use strict';
-  geometry = new THREE.SphereGeometry(5, 5, 5);
+  geometry = new THREE.ConeGeometry(4, 25, 15);
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
   obj.add(mesh);
 }
 
+function addLampMiddle(obj, x, y, z){
+  'use strict';
+  geometry = new THREE.SphereGeometry(2.5, 10, 10);
+  mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(x, y + 10, z);
+  obj.add(mesh);
+}
+
 function addLampTop(obj, x, y, z){
   'use strict';
-  geometry = new THREE.CylinderGeometry(2, 2, 2);
+  geometry = new THREE.CylinderGeometry(4, 4, 5, 15);
   mesh = new THREE.Mesh(geometry, material);
-  mesh.position.set(x, y + 5, z);
+  mesh.position.set(x, y + 14, z);
   obj.add(mesh);
 }
 
@@ -84,7 +84,6 @@ function createLamp(x, y, z){
 }
 
 //CADEIRA
-
 function addChairSeat(obj, x, y, z) {
     'use strict';
     geometry = new THREE.CubeGeometry(20, 2, 20);
@@ -109,6 +108,14 @@ function addChairBack(obj, x, y, z) {
     obj.add(mesh);
 }
 
+function addChairFoot(obj, x, y, z){
+  'use strict';
+  geometry = new THREE.CubeGeometry(2, 2, 15);
+  mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(x, y, z);
+  obj.add(mesh);
+}
+
 function createChair(x, y, z) {
     'use strict';
 
@@ -119,6 +126,7 @@ function createChair(x, y, z) {
     addChairSeat(chair, 0, 0, 0);
     addChairBack(chair, 0, 10, 10);
     addChairLeg(chair, 0, -10, 0);
+    addChairFoot(chair, 0, -20, 8);
 
     scene.add(chair);
 
@@ -126,7 +134,6 @@ function createChair(x, y, z) {
     chair.position.y = y;
     chair.position.z = z;
 }
-
 
 //COISAS
 function createScene() {
