@@ -114,6 +114,7 @@ function addChairFoot(obj, x, y, z){
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
   obj.add(mesh);
+  mesh.rotateY( Math.PI / 2 );
 }
 
 function createChair(x, y, z) {
@@ -126,8 +127,9 @@ function createChair(x, y, z) {
     addChairSeat(chair, 0, 0, 0);
     addChairBack(chair, 0, 10, 10);
     addChairLeg(chair, 0, -10, 0);
-    addChairFoot(chair, 0, -20, 8);
-
+    addChairFoot(chair, 7, -20, 0);
+    addChairFoot(chair, -7, -20, 0, mesh.rotateZ( Math.PI / 2 ));
+    
     scene.add(chair);
 
     chair.position.x = x;
