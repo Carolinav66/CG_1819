@@ -83,6 +83,51 @@ function createLamp(x, y, z){
   lamp.position.z = z;
 }
 
+//CADEIRA
+
+function addChairSeat(obj, x, y, z) {
+    'use strict';
+    geometry = new THREE.CubeGeometry(20, 2, 20);
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x, y, z);
+    obj.add(mesh);
+}
+
+function addChairLeg(obj, x, y, z) {
+    'use strict';
+    geometry = new THREE.CubeGeometry(2, 20, 2);
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x, y, z);
+    obj.add(mesh);
+}
+
+function addChairBack(obj, x, y, z) {
+    'use strict';
+    geometry = new THREE.CubeGeometry(20, 20, 2);
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x, y, z);
+    obj.add(mesh);
+}
+
+function createChair(x, y, z) {
+    'use strict';
+
+    var chair = new THREE.Object3D();
+
+    material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true});
+
+    addChairSeat(chair, 0, 0, 0);
+    addChairBack(chair, 0, 10, 10);
+    addChairLeg(chair, 0, -10, 0);
+
+    scene.add(chair);
+
+    chair.position.x = x;
+    chair.position.y = y;
+    chair.position.z = z;
+}
+
+
 //COISAS
 function createScene() {
     'use strict';
@@ -94,6 +139,7 @@ function createScene() {
 
     createTable(0, 8, 0);
     createLamp(40, 0, 0);
+    createChair(0, 0, 20);
 }
 
 function createCamera() {
