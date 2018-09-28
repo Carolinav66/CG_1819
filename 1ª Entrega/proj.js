@@ -248,18 +248,14 @@ function init() {
 
     createScene();
     createCamera();
-
     controls = new THREE.OrbitControls(camera);
-
-
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
     //window.addEventListener("key", onKey);
 }
 
 function animate(){
-    chair.position.x = chair.position.x +1
-    render()
-	//controls.update();
+    render();
+	controls.update();
 	requestAnimationFrame( animate );
 }
