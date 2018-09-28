@@ -217,7 +217,6 @@ function onKeyDown(e) {
                 node.material.wireframe = !node.material.wireframe;
             }
         });
-        render();
         break;
     }
 }
@@ -252,20 +251,15 @@ function init() {
 
     controls = new THREE.OrbitControls(camera);
 
-    render();
 
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
-    window.addEventListener("key", onKey);
+    //window.addEventListener("key", onKey);
 }
 
-function animate() {
-
+function animate(){
+    chair.position.x = chair.position.x +1
+    render()
+	//controls.update();
 	requestAnimationFrame( animate );
-
-	// required if controls.enableDamping or controls.autoRotate are set to true
-	controls.update();
-
-	renderer.render( scene, camera );
-
 }
