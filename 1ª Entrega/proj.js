@@ -1,6 +1,8 @@
 var controls, camera, scene, renderer;
 
 var geometry, material, mesh;
+
+
 //MESA
 function addTableLeg(obj, x, y, z) {
     'use strict';
@@ -127,7 +129,7 @@ function addChairFoot2(obj, x, y, z){
 
 function addWheels(obj, x, y, z) {
   'use strict';
-  geometry = new THREE.TorusGeometry(2, 1, 10);
+  geometry = new THREE.TorusGeometry(2, 1, 10, 10);
   mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
   obj.add(mesh);
