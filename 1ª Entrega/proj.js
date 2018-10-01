@@ -1,8 +1,5 @@
 var controls, camera, scene, renderer;
 
-var geometry, material, mesh;
-
-//COISAS
 function createScene() {
     'use strict';
 
@@ -12,41 +9,25 @@ function createScene() {
 
     var table = new Table(0, 8, 0);
     scene.add(table.object);
-    var lamp = new Lamp(40, -9.5, 0);
+    var lamp = new Lamp(40, 0, 0);
     scene.add(lamp.object);
     var chair = new Chair(0, 0, 20);
     scene.add(chair.object);
 }
 
-function createCamera() {
+function createCamera(x, y, z) {
     'use strict';
     camera = new THREE.PerspectiveCamera(70,
                                          window.innerWidth / window.innerHeight,
                                          1,
                                          1000);
-    camera.position.x = 50;
-    camera.position.y = 50;
-    camera.position.z = 50;
+    camera.position.x = x;
+    camera.position.y = y;
+    camera.position.z = z;
+
     camera.lookAt(scene.position);
 
 }
-/*
-function onKey(cam){
-  'use strict';
-  cam = new THREE.PerspectiveCamera(70,
-                                       window.innerWidth / window.innerHeight,
-                                       1,
-                                       1000);
-  switch (cam.keyCode) {
-  case 97: //1
-  case 97: //1
-      cam.position.set( 50, 50, 50);
-      cam.lookAt(scene.position);
-      render();
-      break;
-  }
-}
-*/
 
 function onKeyDown(e) {
     'use strict';
@@ -61,6 +42,23 @@ function onKeyDown(e) {
             }
         });
         break;
+
+    case 49: //1
+        createCamera(0, 75, 0);
+        break;
+    case 50: //2
+        createCamera(75, 0, 0);
+        break;
+    case 51: //3
+        createCamera(0, 0, 75);
+        break;
+        
+/*
+    case 37: //esquerda
+    case 38: // cima
+    case 39: // direita
+    case 40: // baixo
+*/
     }
 }
 
@@ -73,7 +71,6 @@ function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
     }
-
 }
 
 function render() {
@@ -90,11 +87,11 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     createScene();
-    createCamera();
+    createCamera(50,50,50);
+
     controls = new THREE.OrbitControls(camera);
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
-    //window.addEventListener("key", onKey);
 }
 
 function animate(){

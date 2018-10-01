@@ -22,7 +22,7 @@ class Lamp /*extends GraphicEntity*/ {
         this.object.add(mesh);
     }
       
-    addLampMiddle(x, y, z){
+    addLampMiddle(x, y, z) {
         'use strict';
 
         var geometry = new THREE.SphereGeometry(5, 10, 10);
@@ -32,7 +32,7 @@ class Lamp /*extends GraphicEntity*/ {
         this.object.add(mesh);
     }
       
-    addLampTop(obj, x, y, z){
+    addLampTop(x, y, z) {
         'use strict';
 
         var geometry = new THREE.CylinderGeometry(6, 6, 7, 15);
