@@ -7,11 +7,11 @@ function createScene() {
 
     scene.add(new THREE.AxisHelper(10));
 
-    var table = new Table(0, 8, 0);
+    var table = new Table(0, 5, 0);  //chao: -25
     scene.add(table.object);
-    var lamp = new Lamp(40, 0, 0);
+    var lamp = new Lamp(40, 0, 0);   //chao: -25
     scene.add(lamp.object);
-    var chair = new Chair(0, 0, 20);
+    var chair = new Chair(0, 0, 20); //chao: -25
     scene.add(chair.object);
 }
 

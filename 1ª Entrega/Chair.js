@@ -15,10 +15,10 @@ class Chair /*extends GraphicEntity*/ {
         this.addChairFoot1(0, -20, -7);
         this.addChairFoot2(7, -20, 0);
         this.addChairFoot2(-7, -20, 0);
-        this.addWheels(0, -22, 15);
-        this.addWheels(0, -22, -15);
-        this.addWheels(15, -22, 0);
-        this.addWheels(-15, -22, 0);
+        this.addWheel(0, -22, 15);
+        this.addWheel(0, -22, -15);
+        this.addWheel(15, -22, 0);
+        this.addWheel(-15, -22, 0);
     }
 
     addChairSeat(x, y, z) {
@@ -66,7 +66,7 @@ class Chair /*extends GraphicEntity*/ {
       this.object.add(mesh);
     }
     
-    addWheels(x, y, z) {
+    addWheel(x, y, z) {
       'use strict';
       var geometry = new THREE.TorusGeometry(2, 1, 10, 10);
       var mesh = new THREE.Mesh(geometry, this.material);
