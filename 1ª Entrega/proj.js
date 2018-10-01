@@ -45,16 +45,19 @@ function onKeyDown(e) {
 
     case 49: //1
         createCamera(0, 75, 0);
+        controls = new THREE.OrbitControls(camera);
         break;
     case 50: //2
         createCamera(75, 0, 0);
+        controls = new THREE.OrbitControls(camera);
         break;
     case 51: //3
         createCamera(0, 0, 75);
+        controls = new THREE.OrbitControls(camera);
         break;
         
 /*
-    case 37: //esquerda
+    case 37: // esquerda
     case 38: // cima
     case 39: // direita
     case 40: // baixo
