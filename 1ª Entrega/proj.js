@@ -8,11 +8,11 @@ function createScene() {
     scene.add(new THREE.AxisHelper(10));
 
     var table = new Table(0, 5, 0);  //chao: -25
-    scene.add(table.object);
+    scene.add(table);
     var lamp = new Lamp(40, 0, 0);   //chao: -25
-    scene.add(lamp.object);
+    scene.add(lamp);
     var chair = new Chair(0, 0, 20); //chao: -25
-    scene.add(chair.object);
+    scene.add(chair);
 }
 
 function createCamera(x, y, z) {
@@ -33,35 +33,64 @@ function onKeyDown(e) {
     'use strict';
 
     switch (e.keyCode) {
-    case 65: //A
-    case 97: //a
-        scene.traverse(function (node) {
+        case 65: //A
+        case 97: //a
+            scene.traverse(function (node) {
 
-            if (node instanceof THREE.Mesh) {
-                node.material.wireframe = !node.material.wireframe;
-            }
-        });
-        break;
+                if (node instanceof THREE.Mesh) {
+                    node.material.wireframe = !node.material.wireframe;
+                }
+            });
+            break;
 
-    case 49: //1
-        createCamera(0, 75, 0);
-        controls = new THREE.OrbitControls(camera);
-        break;
-    case 50: //2
-        createCamera(75, 0, 0);
-        controls = new THREE.OrbitControls(camera);
-        break;
-    case 51: //3
-        createCamera(0, 0, 75);
-        controls = new THREE.OrbitControls(camera);
-        break;
-        
-/*
-    case 37: // esquerda
-    case 38: // cima
-    case 39: // direita
-    case 40: // baixo
-*/
+        case 49: //1
+            createCamera(0, 75, 0);
+            controls = new THREE.OrbitControls(camera);
+            break;
+        case 50: //2
+            createCamera(75, 0, 0);
+            controls = new THREE.OrbitControls(camera);
+            break;
+        case 51: //3
+            createCamera(0, 0, 75);
+            controls = new THREE.OrbitControls(camera);
+            break;
+
+        case 37: //esquerda
+            startMoveLeft();
+            break;
+        case 38: // cima
+            startMoveForward();
+            break;
+        case 39: // direita
+            startMoveRight();
+            break;
+        case 40: // baixo
+            startMoveBackwards();
+            break;
+        default:
+            break;
+    }
+}
+
+function onKeyUp(e) {
+    'use strict';
+
+    switch (e.keyCode) {
+        case 37: //esquerda
+            stopMoveLeft();
+            break;
+        case 38: // cima
+            stopMoveForward();
+            break;
+        case 39: // direita
+            stopMoveRight();
+            break;
+        case 40: // baixo
+            stopMoveBackwards();
+            break;
+        default:
+            break;
     }
 }
 

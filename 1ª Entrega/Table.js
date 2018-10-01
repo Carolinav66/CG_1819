@@ -1,12 +1,13 @@
-class Table /*extends GraphicEntity*/ {
+class Table extends GraphicEntity {
     constructor(x, y, z) {
         'use strict';
 
-        this.object = new THREE.Object3D();
+        super();
+
         this.material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-        this.object.position.x = x;
-        this.object.position.y = y;
-        this.object.position.z = z;
+        this.position.x = x;
+        this.position.y = y;
+        this.position.z = z;
 
         this.addTableTop(0, 0, 0);
         this.addTableLeg(-25, -15, -8);
@@ -21,7 +22,7 @@ class Table /*extends GraphicEntity*/ {
         var geometry = new THREE.CubeGeometry(60, 2, 20);
         var mesh = new THREE.Mesh(geometry, this.material);
         mesh.position.set(x, y, z);
-        this.object.add(mesh);
+        this.add(mesh);
     }
 
     addTableLeg(x, y, z) {
@@ -30,7 +31,7 @@ class Table /*extends GraphicEntity*/ {
         var geometry = new THREE.CylinderGeometry(2, 2, 30);
         var mesh = new THREE.Mesh(geometry, this.material);
         mesh.position.set(x, y, z);
-        this.object.add(mesh);
+        this.add(mesh);
     }
 
 
