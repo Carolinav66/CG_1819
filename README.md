@@ -10,3 +10,5 @@ Programação com objetos == kill me
 agora a serio, que e que fazemos daniel?
 
 espera, a carolina esta a ter PO, ela safa-nos
+
+a Carolina não percebe de objetos

@@ -95,7 +95,7 @@ function init() {
 }
 
 function animate(){
-    render();
+  render();
 	controls.update();
 	requestAnimationFrame( animate );
 }
