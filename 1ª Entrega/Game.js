@@ -69,7 +69,14 @@ class Game {
                 break;
 
             case 38: // cima
+                console.log("before keyDown action");
+                console.log(this.scene.getObjectByName("chair").velocity);
+                console.log(this.scene.getObjectByName("chair").acceleration);
                 this.scene.getObjectByName("chair").acceleration = 5;
+                this.scene.getObjectByName("chair").decelerating = false;
+                console.log("after keyDown action");
+                console.log(this.scene.getObjectByName("chair").velocity);
+                console.log(this.scene.getObjectByName("chair").acceleration);
                 break;
 
             case 39: // direita
@@ -77,7 +84,14 @@ class Game {
                 break;
 
             case 40: // baixo
+                console.log("before keyDown action");
+                console.log(this.scene.getObjectByName("chair").velocity);
+                console.log(this.scene.getObjectByName("chair").acceleration);
                 this.scene.getObjectByName("chair").acceleration = -5;
+                this.scene.getObjectByName("chair").decelerating = false;
+                console.log("after keyDown action");
+                console.log(this.scene.getObjectByName("chair").velocity);
+                console.log(this.scene.getObjectByName("chair").acceleration);
                 break;
 
             default:
@@ -95,10 +109,17 @@ class Game {
 
             case 38: // cima
             case 40: // baixo
+                console.log("before keyUp action");
+                console.log(this.scene.getObjectByName("chair").velocity);
+                console.log(this.scene.getObjectByName("chair").acceleration);
                 if(this.scene.getObjectByName("chair").velocity >= 0)
                     this.scene.getObjectByName("chair").acceleration = -5;
                 else
                     this.scene.getObjectByName("chair").acceleration = 5;
+                this.scene.getObjectByName("chair").decelerating = true;
+                console.log("after keyUp action");
+                console.log(this.scene.getObjectByName("chair").velocity);
+                console.log(this.scene.getObjectByName("chair").acceleration);
                 break;
 
             case 39: // direita

@@ -10,6 +10,7 @@ class Chair extends GraphicEntity {
         this.position.z = z;
 
         this.name = "chair";
+        this.decelerating = false;
         this.acceleration = 0;
         this.velocity = 0;
         this.angle = 0;
@@ -30,10 +31,14 @@ class Chair extends GraphicEntity {
     changeSpeed(clock) {
         'use strict';
 
+        console.log(this.velocity);
         var delta = clock.getDelta();
         var v_0 = this.velocity;
         this.velocity += this.acceleration * delta;
-        if (Math.abs(this.velocity) <= 0.05) this.acceleration = 0;
+        if (this.decelerating && Math.abs(this.velocity) <= 0.5) {
+            this.acceleration = 0;
+            this.velocity = 0;
+        }
         var x = v_0 * delta - 0.5 * this.acceleration * delta * delta;
         this.translateZ(-x);
     }
