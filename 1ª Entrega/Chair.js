@@ -31,7 +31,6 @@ class Chair extends GraphicEntity {
     changeSpeed(clock) {
         'use strict';
 
-        console.log(this.velocity);
         var delta = clock.getDelta();
         var v_0 = this.velocity;
         this.velocity += this.acceleration * delta;
