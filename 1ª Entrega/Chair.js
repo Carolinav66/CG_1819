@@ -9,6 +9,10 @@ class Chair extends GraphicEntity {
         this.position.y = y;
         this.position.z = z;
 
+        this.name = "chair";
+        this.acceleration = 0;
+        this.velocity = 0;
+        
         this.addChairSeat(0, 0, 0);
         this.addChairBack(0, 10, 10);
         this.addChairLeg(0, -10, 0);
@@ -21,6 +25,23 @@ class Chair extends GraphicEntity {
         this.addWheel(15, -22, 0);
         this.addWheel(-15, -22, 0);
     }
+
+    changeSpeed(clock) {
+        var delta = clock.getDelta();
+        var v_0 = this.velocity;
+        this.velocity += this.acceleration * delta;
+        if (Math.abs(this.velocity) <= 0.05) this.acceleration = 0;
+        var x = v_0 * delta - 0.5 * this.acceleration * delta * delta;
+        this.translateZ(-x);
+    }
+
+/*     stopMoving(clock) {
+        var delta = clock.getDelta();
+        var v_0 = this.velocity;
+        this.velocity += 0;
+        var x = v_0 * delta - 0.5 * acceleration * delta * delta;
+        this.translateX(x);
+    } */
 
     addChairSeat(x, y, z) {
         'use strict';

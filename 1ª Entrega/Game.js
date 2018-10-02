@@ -1,7 +1,10 @@
 class Game {
     constructor() {
         'use strict';
-        var controls, camera, scene, renderer;
+
+        this.clock = new THREE.Clock();
+        this.clock.start();
+        
     }
 
     createScene() {
@@ -64,13 +67,15 @@ class Game {
                 startMoveLeft();
                 break;
             case 38: // cima
-                startMoveForward();
+                console.log("up");
+                this.scene.getObjectByName("chair").acceleration = 5;
                 break;
             case 39: // direita
                 startMoveRight();
                 break;
             case 40: // baixo
-                startMoveBackwards();
+                console.log("down");
+                this.scene.getObjectByName("chair").acceleration = -5;
                 break;
             default:
                 break;
@@ -85,13 +90,13 @@ class Game {
                 stopMoveLeft();
                 break;
             case 38: // cima
-                stopMoveForward();
+                this.scene.getObjectByName("chair").acceleration = -5;
                 break;
             case 39: // direita
                 stopMoveRight();
                 break;
             case 40: // baixo
-                stopMoveBackwards();
+                this.scene.getObjectByName("chair").acceleration = 5;
                 break;
             default:
                 break;
@@ -127,10 +132,13 @@ class Game {
     
         this.controls = new THREE.OrbitControls(this.camera);
         window.addEventListener("keydown", this.onKeyDown.bind(this));
+        window.addEventListener("keyup", this.onKeyUp.bind(this));
         window.addEventListener("resize", this.onResize.bind(this));
     }
     
     animate() {
+        this.scene.getObjectByName("chair").changeSpeed(this.clock);
+
         this.render();
         this.controls.update();
         requestAnimationFrame( this.animate.bind(this) );
