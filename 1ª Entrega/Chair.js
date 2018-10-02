@@ -12,7 +12,8 @@ class Chair extends GraphicEntity {
         this.name = "chair";
         this.acceleration = 0;
         this.velocity = 0;
-        
+        this.angle = 0;
+
         this.addChairSeat(0, 0, 0);
         this.addChairBack(0, 10, 10);
         this.addChairLeg(0, -10, 0);
@@ -27,6 +28,8 @@ class Chair extends GraphicEntity {
     }
 
     changeSpeed(clock) {
+        'use strict';
+
         var delta = clock.getDelta();
         var v_0 = this.velocity;
         this.velocity += this.acceleration * delta;
@@ -35,13 +38,11 @@ class Chair extends GraphicEntity {
         this.translateZ(-x);
     }
 
-/*     stopMoving(clock) {
-        var delta = clock.getDelta();
-        var v_0 = this.velocity;
-        this.velocity += 0;
-        var x = v_0 * delta - 0.5 * acceleration * delta * delta;
-        this.translateX(x);
-    } */
+    rotateChair(){
+        'use strict';
+
+        this.rotateY(this.angle);
+    }
 
     addChairSeat(x, y, z) {
         'use strict';
@@ -69,32 +70,31 @@ class Chair extends GraphicEntity {
         mesh.position.set(x, y, z);
         this.add(mesh);
     }
-    
+
     addChairFoot1(x, y, z){
       'use strict';
-    
+
       var geometry = new THREE.CubeGeometry(2, 2, 15);
       var mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(x, y, z);
       this.add(mesh);
     }
-    
+
     addChairFoot2(x, y, z){
       'use strict';
-      
+
       var geometry = new THREE.CubeGeometry(15, 2, 2);
       var mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(x, y, z);
       this.add(mesh);
     }
-    
+
     addWheel(x, y, z) {
       'use strict';
+
       var geometry = new THREE.TorusGeometry(2, 1, 10, 10);
       var mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(x, y, z);
       this.add(mesh);
     }
-
-
 }
