@@ -94,15 +94,15 @@ class Game {
                 break;
 
             case 38: // cima
-                this.scene.getObjectByName("chair").acceleration = -5;
+            case 40: // baixo
+                if(this.scene.getObjectByName("chair").velocity >= 0)
+                    this.scene.getObjectByName("chair").acceleration = -5;
+                else
+                    this.scene.getObjectByName("chair").acceleration = 5;
                 break;
 
             case 39: // direita
               this.scene.getObjectByName("chair").angle = 0;
-                break;
-
-            case 40: // baixo
-                this.scene.getObjectByName("chair").acceleration = 5;
                 break;
 
             default:
