@@ -105,7 +105,7 @@ class Game {
                 break;
 
             case 39: // direita
-              this.scene.getObjectByName("chair").angle = 0;
+                this.scene.getObjectByName("chair").angle = 0;
                 break;
 
             default:

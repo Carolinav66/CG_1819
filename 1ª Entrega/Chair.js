@@ -14,9 +14,15 @@ class Chair extends GraphicEntity {
         this.acceleration = 0;
         this.velocity = 0;
         this.angle = 0;
+        this.actualAngle = 0;
+
+        this.upper = new THREE.Group();
+        this.upperDirection = new THREE.Vector3(0, 0, 1);
 
         this.addChairSeat(0, 0, 0);
         this.addChairBack(0, 10, 10);
+        this.add(this.upper);
+
         this.addChairLeg(0, -10, 0);
         this.addChairFoot1(0, -20, 7);
         this.addChairFoot1(0, -20, -7);
@@ -26,6 +32,8 @@ class Chair extends GraphicEntity {
         this.addWheel(0, -22, -15);
         this.addWheel(15, -22, 0);
         this.addWheel(-15, -22, 0);
+
+        //this.children
     }
 
     changeSpeed(clock) {
@@ -39,13 +47,16 @@ class Chair extends GraphicEntity {
             this.velocity = 0;
         }
         var x = v_0 * delta - 0.5 * this.acceleration * delta * delta;
-        this.translateZ(-x);
+        this.translateOnAxis(this.upperDirection, -x);
     }
 
     rotateChair(){
         'use strict';
 
-        this.rotateY(this.angle);
+        this.upperDirection.z = Math.cos(this.actualAngle);
+        this.upperDirection.x = Math.sin(this.actualAngle);
+        this.upper.rotateY(this.angle);
+        this.actualAngle += this.angle;
     }
 
     addChairSeat(x, y, z) {
@@ -54,22 +65,22 @@ class Chair extends GraphicEntity {
         var geometry = new THREE.CubeGeometry(20, 2, 20);
         var mesh = new THREE.Mesh(geometry, this.material);
         mesh.position.set(x, y, z);
-        this.add(mesh);
-    }
-
-    addChairLeg(x, y, z) {
-        'use strict';
-
-        var geometry = new THREE.CubeGeometry(2, 20, 2);
-        var mesh = new THREE.Mesh(geometry, this.material);
-        mesh.position.set(x, y, z);
-        this.add(mesh);
+        this.upper.add(mesh);
     }
 
     addChairBack(x, y, z) {
         'use strict';
 
         var geometry = new THREE.CubeGeometry(20, 20, 2);
+        var mesh = new THREE.Mesh(geometry, this.material);
+        mesh.position.set(x, y, z);
+        this.upper.add(mesh);
+    }
+
+    addChairLeg(x, y, z) {
+        'use strict';
+
+        var geometry = new THREE.CubeGeometry(2, 20, 2);
         var mesh = new THREE.Mesh(geometry, this.material);
         mesh.position.set(x, y, z);
         this.add(mesh);
