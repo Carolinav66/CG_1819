@@ -42,6 +42,10 @@ class Chair extends GraphicEntity {
     changeSpeed(clock) {
         'use strict';
 
+        for (var i = 0; i < this.wheels.children.length; i++) {
+            this.wheels.children[i].rotateY(this.angle);
+        }
+
         var delta = clock.getDelta();
         var v_0 = this.velocity;
         this.velocity += this.acceleration * delta;
@@ -53,7 +57,7 @@ class Chair extends GraphicEntity {
         this.translateOnAxis(this.upperDirection, -x);
     }
 
-    rotateChair(){
+    rotateChair() {
         'use strict';
 
         this.upperDirection.z = Math.cos(this.actualAngle);
@@ -89,7 +93,7 @@ class Chair extends GraphicEntity {
         this.add(mesh);
     }
 
-    addChairFoot1(x, y, z){
+    addChairFoot1(x, y, z) {
       'use strict';
 
       var geometry = new THREE.CubeGeometry(2, 2, 15);
@@ -98,7 +102,7 @@ class Chair extends GraphicEntity {
       this.add(mesh);
     }
 
-    addChairFoot2(x, y, z){
+    addChairFoot2(x, y, z) {
       'use strict';
 
       var geometry = new THREE.CubeGeometry(15, 2, 2);
@@ -113,6 +117,7 @@ class Chair extends GraphicEntity {
       var geometry = new THREE.TorusGeometry(2, 1, 10, 10);
       var mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(x, y, z);
+      mesh.rotateY(0.5 * Math.PI);
       this.wheels.add(mesh);
     }
 }
