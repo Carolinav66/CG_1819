@@ -18,7 +18,6 @@ class Chair extends GraphicEntity {
 
         this.upper = new THREE.Group();
         this.upperDirection = new THREE.Vector3(0, 0, 1);
-
         this.addChairSeat(0, 0, 0);
         this.addChairBack(0, 10, 10);
         this.add(this.upper);
@@ -28,10 +27,14 @@ class Chair extends GraphicEntity {
         this.addChairFoot1(0, -20, -7);
         this.addChairFoot2(7, -20, 0);
         this.addChairFoot2(-7, -20, 0);
+
+        this.wheels = new THREE.Group();
+        this.wheelsDirection = new THREE.Vector3(0, 0, 1);
         this.addWheel(0, -22, 15);
         this.addWheel(0, -22, -15);
         this.addWheel(15, -22, 0);
         this.addWheel(-15, -22, 0);
+        this.add(this.wheels);
 
         //this.children
     }
@@ -110,6 +113,6 @@ class Chair extends GraphicEntity {
       var geometry = new THREE.TorusGeometry(2, 1, 10, 10);
       var mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(x, y, z);
-      this.add(mesh);
+      this.wheels.add(mesh);
     }
 }
