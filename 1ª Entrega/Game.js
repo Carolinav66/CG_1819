@@ -65,7 +65,7 @@ class Game {
                 break;
 
             case 37: //esquerda
-                this.scene.getObjectByName("chair").angle = 1/100;
+                this.scene.getObjectByName("chair").angle = 1/100 * Math.PI;
                 break;
 
             case 38: // cima
@@ -74,7 +74,7 @@ class Game {
                 break;
 
             case 39: // direita
-                this.scene.getObjectByName("chair").angle = -1/100;
+                this.scene.getObjectByName("chair").angle = -1/100 * Math.PI;
                 break;
 
             case 40: // baixo

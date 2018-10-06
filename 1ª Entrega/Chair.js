@@ -30,20 +30,30 @@ class Chair extends GraphicEntity {
 
         this.wheels = new THREE.Group();
         this.wheelsDirection = new THREE.Vector3(0, 0, 1);
+        this.wheelsAngle = 0;
         this.addWheel(0, -22, 15);
         this.addWheel(0, -22, -15);
         this.addWheel(15, -22, 0);
         this.addWheel(-15, -22, 0);
         this.add(this.wheels);
 
-        //this.children
     }
 
     changeSpeed(clock) {
         'use strict';
 
-        for (var i = 0; i < this.wheels.children.length; i++) {
-            this.wheels.children[i].rotateY(this.angle);
+        if (this.wheelsAngle <= this.actualAngle) {
+            var increment = 1/100 * Math.PI;
+        } else {
+            var increment = -1/100 * Math.PI;
+        }
+
+        if (this.velocity != 0 && Math.abs(this.actualAngle - this.wheelsAngle) % Math.PI >= 1/50 * Math.PI) {
+            this.wheelsAngle += increment;
+            this.wheelsAngle %= Math.PI * 2;
+            for (var i = 0; i < this.wheels.children.length; i++) {
+                this.wheels.children[i].rotateY(increment);
+            }
         }
 
         var delta = clock.getDelta();
@@ -64,6 +74,7 @@ class Chair extends GraphicEntity {
         this.upperDirection.x = Math.sin(this.actualAngle);
         this.upper.rotateY(this.angle);
         this.actualAngle += this.angle;
+        this.actualAngle %= Math.PI * 2;
     }
 
     addChairSeat(x, y, z) {
