@@ -39,10 +39,18 @@ class Chair extends GraphicEntity {
 
     }
 
+    recalcAngle(angle) {
+        angle += Math.PI * 2;
+        angle %= Math.PI * 2;
+        return angle;
+    }
+
     changeSpeed(clock) {
         'use strict';
 
-        if (this.wheelsAngle <= this.actualAngle) {
+        var diff = this.recalcAngle(this.wheelsAngle - this.actualAngle);
+
+        if (3/2 * Math.PI <= diff && diff < 2 * Math.PI || 1/2 * Math.PI <= diff && diff < Math.PI) {
             var increment = 1/100 * Math.PI;
         } else {
             var increment = -1/100 * Math.PI;
@@ -50,7 +58,9 @@ class Chair extends GraphicEntity {
 
         if (this.velocity != 0 && Math.abs(this.actualAngle - this.wheelsAngle) % Math.PI >= 1/50 * Math.PI) {
             this.wheelsAngle += increment;
-            this.wheelsAngle %= Math.PI * 2;
+            //if(this.wheelsAngle < 0) this.wheelsAngle += Math.PI * 2
+            //this.wheelsAngle %= Math.PI * 2;
+            this.wheelsAngle = this.recalcAngle(this.wheelsAngle);
             for (var i = 0; i < this.wheels.children.length; i++) {
                 this.wheels.children[i].rotateY(increment);
             }
@@ -74,7 +84,9 @@ class Chair extends GraphicEntity {
         this.upperDirection.x = Math.sin(this.actualAngle);
         this.upper.rotateY(this.angle);
         this.actualAngle += this.angle;
-        this.actualAngle %= Math.PI * 2;
+        //if(this.actualAngle < 0) this.actualAngle += Math.PI * 2
+        //this.actualAngle %= Math.PI * 2;
+        this.actualAngle = this.recalcAngle(this.actualAngle);
     }
 
     addChairSeat(x, y, z) {
