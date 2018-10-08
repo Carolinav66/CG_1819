@@ -24,10 +24,10 @@ class Game {
     createCamera(x, y, z) {
         'use strict';
         
-        this.camera = new THREE.OrthographicCamera(window.innerWidth / - 10,
-                                                   window.innerWidth / 10,
-                                                   window.innerHeight / 10,
-                                                   window.innerHeight / - 10, 
+        this.camera = new THREE.OrthographicCamera(window.innerWidth / - 13,
+                                                   window.innerWidth / 13,
+                                                   window.innerHeight / 13,
+                                                   window.innerHeight / - 13, 
                                                    1,
                                                    1000);
         this.camera.position.x = x;  
