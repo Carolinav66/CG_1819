@@ -30,7 +30,8 @@ class Chair extends GraphicEntity {
 
         this.wheels = new THREE.Group();
         this.wheelsDirection = new THREE.Vector3(0, 0, 1);
-        this.wheelsAngle = 0;
+        this.wheelsYAngle = 0;
+        this.wheelsZAngle = 0;
         this.addWheel(0, -22, 15);
         this.addWheel(0, -22, -15);
         this.addWheel(15, -22, 0);
@@ -48,7 +49,7 @@ class Chair extends GraphicEntity {
     changeSpeed(clock) {
         'use strict';
 
-        var diff = this.recalcAngle(this.wheelsAngle - this.actualAngle);
+        var diff = this.recalcAngle(this.wheelsYAngle - this.actualAngle);
 
         if (3/2 * Math.PI <= diff && diff < 2 * Math.PI || 1/2 * Math.PI <= diff && diff < Math.PI) {
             var increment = 1/100 * Math.PI;
@@ -56,13 +57,19 @@ class Chair extends GraphicEntity {
             var increment = -1/100 * Math.PI;
         }
 
-        if (this.velocity != 0 && Math.abs(this.actualAngle - this.wheelsAngle) % Math.PI >= 1/50 * Math.PI) {
-            this.wheelsAngle += increment;
-            //if(this.wheelsAngle < 0) this.wheelsAngle += Math.PI * 2
-            //this.wheelsAngle %= Math.PI * 2;
-            this.wheelsAngle = this.recalcAngle(this.wheelsAngle);
+        if (this.velocity != 0 && Math.abs(this.actualAngle - this.wheelsYAngle) % Math.PI >= 1/50 * Math.PI) { //this.velocity != 0 &&
+            this.wheelsYAngle += increment;
+            //if(this.wheelsYAngle < 0) this.wheelsYAngle += Math.PI * 2
+            //this.wheelsYAngle %= Math.PI * 2;
+            this.wheelsYAngle = this.recalcAngle(this.wheelsYAngle);
             for (var i = 0; i < this.wheels.children.length; i++) {
-                this.wheels.children[i].rotateY(increment);
+                this.wheels.children[i].rotation.y+=increment;
+            }
+        }
+
+        if (this.velocity != 0) {
+            for (var i = 0; i < this.wheels.children.length; i++) {
+                this.wheels.children[i].rotation.z+=(this.velocity*Math.PI/500);
             }
         }
 
@@ -140,7 +147,8 @@ class Chair extends GraphicEntity {
       var geometry = new THREE.TorusGeometry(2, 1, 10, 10);
       var mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(x, y, z);
-      mesh.rotateY(0.5 * Math.PI);
+      mesh.rotateY(1.5 * Math.PI);
+      mesh.add(new THREE.AxisHelper(10))
       this.wheels.add(mesh);
     }
 }
