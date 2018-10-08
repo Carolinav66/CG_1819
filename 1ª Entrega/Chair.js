@@ -94,6 +94,13 @@ class Chair extends GraphicEntity {
         //if(this.actualAngle < 0) this.actualAngle += Math.PI * 2
         //this.actualAngle %= Math.PI * 2;
         this.actualAngle = this.recalcAngle(this.actualAngle);
+        if (this.recalcAngle(this.actualAngle-this.wheelsYAngle) > 0.5*Math.PI){
+            this.wheelsYAngle+=Math.PI
+            for (var i = 0; i < this.wheels.children.length; i++) {
+                this.wheels.children[i].rotation.y+=Math.PI;
+            }
+            console.log("wheels flipped")
+        }
     }
 
     addChairSeat(x, y, z) {
