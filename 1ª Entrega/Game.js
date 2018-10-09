@@ -4,6 +4,11 @@ class Game {
 
         this.clock = new THREE.Clock();
         this.clock.start();
+
+        this.aspect = [window.innerWidth, window.innerHeight];
+        this.ratio = window.innerWidth / window.innerHeight;
+        this.height;
+        this.width;
       }
 
     createScene() {
@@ -23,13 +28,22 @@ class Game {
 
     createCamera(x, y, z) {
         'use strict';
-        
+
+        var frostum = 50;
+
+        this.camera = new THREE.OrthographicCamera(-frostum * this.ratio, //frostum * aspect
+                                                    frostum * this.ratio,
+                                                    frostum,              //só frostum 
+                                                   -frostum, 
+                                                    1,
+                                                    1000);
+        /*
         this.camera = new THREE.OrthographicCamera(window.innerWidth / - 13,
                                                    window.innerWidth / 13,
                                                    window.innerHeight / 13,
                                                    window.innerHeight / - 13, 
                                                    1,
-                                                   1000);
+                                                   1000);*/
         this.camera.position.x = x;  
         this.camera.position.y = y;
         this.camera.position.z = z;
@@ -119,12 +133,30 @@ class Game {
     onResize() {
         'use strict';
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(window.innerWidth, window.innerHeight); //por para baixo
+
+        //novo aspect
+        var newRatio = window.innerWidth / window.innerHeight;
+        var frostum = 50;
+
+        /*if( this.ratio[0] / this.ratio[1] > window.innerWidth / window.innerHeight ) {
+            var width = window.innerWidth;
+            var height = (this.ratio[1] / this.ratio[0]) * window.innerHeight / (window.innerHeight / window.innerWidth);
+        } else {
+            var height = window.innerHeight;
+            var width = (this.ratio[0] / this.ratio[1]) * window.innerWidth / (window.innerWidth / window.innerHeight);
+        }*/
+
 
         if (window.innerHeight > 0 && window.innerWidth > 0) {
-            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.left = -frostum * newRatio;
+            this.camera.right = frostum * newRatio;
+            this.camera.top = frostum;
+            this.camera.bottom = -frostum;
             this.camera.updateProjectionMatrix();
         }
+
+        //this.ratio = [window.innerWidth, window.innerHeight];
     }
 
     render() {
