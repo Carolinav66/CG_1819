@@ -57,10 +57,8 @@ class Chair extends GraphicEntity {
             var increment = -1/100 * Math.PI;
         }
 
-        if (this.velocity != 0 && Math.abs(this.actualAngle - this.wheelsYAngle) % Math.PI >= 1/50 * Math.PI) { //this.velocity != 0 &&
+        if (this.velocity != 0 && Math.abs(this.actualAngle - this.wheelsYAngle) % Math.PI >= 1/50 * Math.PI) {
             this.wheelsYAngle += increment;
-            //if(this.wheelsYAngle < 0) this.wheelsYAngle += Math.PI * 2
-            //this.wheelsYAngle %= Math.PI * 2;
             this.wheelsYAngle = this.recalcAngle(this.wheelsYAngle);
             for (var i = 0; i < this.wheels.children.length; i++) {
                 this.wheels.children[i].rotation.y+=increment;
@@ -91,15 +89,14 @@ class Chair extends GraphicEntity {
         this.upperDirection.x = Math.sin(this.actualAngle);
         this.upper.rotateY(this.angle);
         this.actualAngle += this.angle;
-        //if(this.actualAngle < 0) this.actualAngle += Math.PI * 2
-        //this.actualAngle %= Math.PI * 2;
         this.actualAngle = this.recalcAngle(this.actualAngle);
-        if (this.recalcAngle(this.actualAngle-this.wheelsYAngle) > 0.5*Math.PI){
-            this.wheelsYAngle+=Math.PI
+        var diff = this.recalcAngle(this.actualAngle - this.wheelsYAngle)
+        if (0.5 * Math.PI < diff && diff < 1.5 * Math.PI ){
+            this.wheelsYAngle += Math.PI;
             for (var i = 0; i < this.wheels.children.length; i++) {
                 this.wheels.children[i].rotation.y+=Math.PI;
             }
-            console.log("wheels flipped")
+            console.log("wheels flipped");
         }
     }
 

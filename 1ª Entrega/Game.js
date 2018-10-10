@@ -52,6 +52,13 @@ class Game {
 
     }
 
+    changeCameraPosition(x, y, z) {
+        this.camera.position.x = x;  
+        this.camera.position.y = y;
+        this.camera.position.z = z;
+
+    }
+
     onKeyDown(e) {
         'use strict';
 
@@ -67,17 +74,20 @@ class Game {
                 break;
 
             case 49: //1
-                this.createCamera(0, 75, 0);
+                this.changeCameraPosition(0, 75, 0);
+                this.onResize();
                 this.controls = new THREE.OrbitControls(this.camera);
                 break;
 
             case 50: //2
-                this.createCamera(75, 0, 0);
+                this.changeCameraPosition(75, 0, 0);
+                this.onResize();
                 this.controls = new THREE.OrbitControls(this.camera);
                 break;
 
             case 51: //3
-                this.createCamera(0, 0, 75);
+                this.changeCameraPosition(0, 0, 75);
+                this.onResize();
                 this.controls = new THREE.OrbitControls(this.camera);
                 break;
 
@@ -133,20 +143,11 @@ class Game {
     onResize() {
         'use strict';
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight); //por para baixo
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
 
         //novo aspect
         var newRatio = window.innerWidth / window.innerHeight;
         var frostum = 50;
-
-        /*if( this.ratio[0] / this.ratio[1] > window.innerWidth / window.innerHeight ) {
-            var width = window.innerWidth;
-            var height = (this.ratio[1] / this.ratio[0]) * window.innerHeight / (window.innerHeight / window.innerWidth);
-        } else {
-            var height = window.innerHeight;
-            var width = (this.ratio[0] / this.ratio[1]) * window.innerWidth / (window.innerWidth / window.innerHeight);
-        }*/
-
 
         if (window.innerHeight > 0 && window.innerWidth > 0) {
             this.camera.left = -frostum * newRatio;
@@ -156,7 +157,6 @@ class Game {
             this.camera.updateProjectionMatrix();
         }
 
-        //this.ratio = [window.innerWidth, window.innerHeight];
     }
 
     render() {
