@@ -2,11 +2,9 @@ class Lamp extends GraphicEntity {
     constructor(x, y, z) {
         'use strict';
 
-        super();
-
-        this.position.x = x;
-        this.position.y = y;
-        this.position.z = z;
+        super(x, y, z,
+            new THREE.MeshBasicMaterial({ color: 0xffff00 , wireframe: true }),
+            "lamp");
 
         this.addLampBottom(0, 0, 0);
         this.addLampMiddle(0, 0, 0);

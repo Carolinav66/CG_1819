@@ -2,14 +2,10 @@ class Chair extends GraphicEntity {
     constructor(x, y, z) {
         'use strict';
 
-        super();
+        super(x, y, z, 
+            new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true }),
+            "chair");
 
-        this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-        this.position.x = x;
-        this.position.y = y;
-        this.position.z = z;
-
-        this.name = "chair";
         this.decelerating = false;
         this.acceleration = 0;
         this.velocity = 0;

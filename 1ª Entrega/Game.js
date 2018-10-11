@@ -7,8 +7,10 @@ class Game {
 
         this.aspect = [window.innerWidth, window.innerHeight];
         this.ratio = window.innerWidth / window.innerHeight;
-        this.height;
-        this.width;
+
+        this.camaraPos = [0, 75, 0];
+        this.changeCamara = false;
+        this.toggleWireframe = false;
       }
 
     createScene() {
@@ -26,36 +28,31 @@ class Game {
         this.scene.add(chair);
     }
 
-    createCamera(x, y, z) {
+    createCamera() {
         'use strict';
 
-        var frostum = 50;
+        var aspectConstant = 50;
 
-        this.camera = new THREE.OrthographicCamera(-frostum * this.ratio, //frostum * aspect
-                                                    frostum * this.ratio,
-                                                    frostum,              //só frostum 
-                                                   -frostum, 
+        this.camera = new THREE.OrthographicCamera(-aspectConstant * this.ratio,
+                                                    aspectConstant * this.ratio,
+                                                    aspectConstant,
+                                                   -aspectConstant,
                                                     1,
                                                     1000);
-        /*
-        this.camera = new THREE.OrthographicCamera(window.innerWidth / - 13,
-                                                   window.innerWidth / 13,
-                                                   window.innerHeight / 13,
-                                                   window.innerHeight / - 13, 
-                                                   1,
-                                                   1000);*/
-        this.camera.position.x = x;  
-        this.camera.position.y = y;
-        this.camera.position.z = z;
+        this.camera.position.x = this.camaraPos[0];  
+        this.camera.position.y = this.camaraPos[1];
+        this.camera.position.z = this.camaraPos[2];
 
         this.camera.lookAt(this.scene.position);
 
     }
 
-    changeCameraPosition(x, y, z) {
-        this.camera.position.x = x;  
-        this.camera.position.y = y;
-        this.camera.position.z = z;
+    changeCameraPosition() {
+        this.camera.position.x = this.camaraPos[0];  
+        this.camera.position.y = this.camaraPos[1];
+        this.camera.position.z = this.camaraPos[2];
+
+        this.camera.lookAt(this.scene.position);
 
     }
 
@@ -65,30 +62,22 @@ class Game {
         switch (e.keyCode) {
             case 65: //A
             case 97: //a
-                this.scene.traverse(function (node) {
-
-                    if (node instanceof THREE.Mesh) {
-                        node.material.wireframe = !node.material.wireframe;
-                    }
-                });
+                this.toggleWireframe = true;
                 break;
 
             case 49: //1
-                this.changeCameraPosition(0, 75, 0);
-                this.onResize();
-                this.controls = new THREE.OrbitControls(this.camera);
+                this.camaraPos = [0, 75, 0];
+                this.changeCamara = true;
                 break;
 
             case 50: //2
-                this.changeCameraPosition(75, 0, 0);
-                this.onResize();
-                this.controls = new THREE.OrbitControls(this.camera);
+                this.camaraPos = [75, 0, 0];
+                this.changeCamara = true;
                 break;
 
             case 51: //3
-                this.changeCameraPosition(0, 0, 75);
-                this.onResize();
-                this.controls = new THREE.OrbitControls(this.camera);
+                this.camaraPos = [0, 0, 75];
+                this.changeCamara = true;
                 break;
 
             case 37: //esquerda
@@ -124,10 +113,11 @@ class Game {
 
             case 38: // cima
             case 40: // baixo
-                if(this.scene.getObjectByName("chair").velocity >= 0)
+                if (this.scene.getObjectByName("chair").velocity >= 0) {
                     this.scene.getObjectByName("chair").acceleration = -5;
-                else
+                } else {
                     this.scene.getObjectByName("chair").acceleration = 5;
+                }
                 this.scene.getObjectByName("chair").decelerating = true;
                 break;
 
@@ -147,13 +137,13 @@ class Game {
 
         //novo aspect
         var newRatio = window.innerWidth / window.innerHeight;
-        var frostum = 50;
+        var aspectConstant = 50;
 
         if (window.innerHeight > 0 && window.innerWidth > 0) {
-            this.camera.left = -frostum * newRatio;
-            this.camera.right = frostum * newRatio;
-            this.camera.top = frostum;
-            this.camera.bottom = -frostum;
+            this.camera.left = -aspectConstant * newRatio;
+            this.camera.right = aspectConstant * newRatio;
+            this.camera.top = aspectConstant;
+            this.camera.bottom = -aspectConstant;
             this.camera.updateProjectionMatrix();
         }
 
@@ -175,20 +165,37 @@ class Game {
         document.body.appendChild(this.renderer.domElement);
 
         this.createScene();
-        this.createCamera(50,50,50);
+        this.createCamera(); //50, 50, 50
 
-        this.controls = new THREE.OrbitControls(this.camera);
+        this.render();
+
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
         window.addEventListener("resize", this.onResize.bind(this));
     }
 
     animate() {
+        if (this.changeCamara) {
+            this.changeCameraPosition();
+            this.changeCamara = false;
+            this.onResize();
+        }
+
+        if (this.toggleWireframe) {
+            this.scene.traverse(function (node) {
+
+                if (node instanceof THREE.Mesh) {
+                    node.material.wireframe = !node.material.wireframe;
+                    console.log("pi");
+                }
+            });
+            this.toggleWireframe = false;
+        }
+
         this.scene.getObjectByName("chair").changeSpeed(this.clock);
         this.scene.getObjectByName("chair").rotateChair();
 
         this.render();
-        this.controls.update();
         requestAnimationFrame( this.animate.bind(this) );
     }
 }
