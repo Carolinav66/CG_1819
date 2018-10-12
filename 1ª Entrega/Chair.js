@@ -148,7 +148,6 @@ class Chair extends GraphicEntity {
       var mesh = new THREE.Mesh(geometry, this.material);
       mesh.position.set(x, y, z);
       mesh.rotateY(1.5 * Math.PI);
-      mesh.add(new THREE.AxisHelper(10))
       this.wheels.add(mesh);
     }
 }
