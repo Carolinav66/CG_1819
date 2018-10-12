@@ -18,8 +18,6 @@ class Game {
 
         this.scene = new THREE.Scene();
 
-        this.scene.add(new THREE.AxisHelper(10));
-
         var table = new Table(0, 5, 0);  //chao: -25
         this.scene.add(table);
         var lamp = new Lamp(40, 0, 0);   //chao: -25
