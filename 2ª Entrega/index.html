@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset=”utf-8”>
+        <title>1&ordm; Proj</title>
+        <style>
+            body {
+                margin: 0px;
+                background-color: #fff;
+                overflow: hidden;
+              }
+        </style>
+        <script src="three.js"></script>
+        <script src="GraphicEntity.js"></script>
+        <script src="Field.js"></script>
+        <script src="Ball.js"></script>
+        <script src="Lamp.js"></script>
+        <script src="Game.js"></script>
+        <script src="js/controls/OrbitControls.js"></script>
+    </head>
+    <body>
+        <script>
+            var game = new Game();
+            game.init();
+            game.animate();
+        </script>
+    </body>
+</html>
