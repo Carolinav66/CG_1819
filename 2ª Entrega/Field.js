@@ -3,7 +3,7 @@ class Field extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true }),
+            new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: true }),
             "table");
 
         this.addFieldFloor(0, 0, 0);

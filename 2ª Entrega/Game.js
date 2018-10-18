@@ -12,23 +12,63 @@ class Game {
         this.changeCamara = false;
         this.toggleWireframe = false;
 
-      }
+    }
 
+    placeBalls() {
+        'use strict';
+        var balls = []
+        console.log("colision");
 
+        var radius = Math.sqrt(4500)/20;
+        var colision=true;
+
+        var x = Math.random()*(60-2*radius)-30+radius;
+        var y = radius;
+        var z = Math.random()*(30-2*radius)-15+radius;
+
+        for(var i=0; i<10; i++){
+            x = Math.random()*(60-2*radius)-30+radius;
+            y = radius;
+            z = Math.random()*(30-2*radius)-15+radius;
+            balls[i]= new Ball(x,y,z,radius);
+        }
+        while (colision==true){
+            colision=false;
+            for(var i=0; i<10; i++){
+                for(var j=0; j<10; j++){
+                    if(balls[i].ballColiding(balls[j])){
+                        if (i==j){
+                            continue;
+                        }
+                        x = Math.random()*(60-2*radius)-30+radius;
+                        y = radius;
+                        z = Math.random()*(30-2*radius)-15+radius;
+                        console.log("colision");
+                        balls[i] = new Ball(x,y,z,radius);
+                        colision=true;
+                    }
+                }
+            }
+        }
+
+        for(var i=0; i<10; i++){
+            this.scene.add(balls[i])
+        }
+    }
     createScene() {
         'use strict';
 
         this.scene = new THREE.Scene();
 
-        var field = new Field(0, 0, 0);  //chao: -25
+        var field = new Field(0, 0, 0);
         this.scene.add(field);
-        var ball = new Ball(0,+Math.sqrt(4500)/40,0);
-        this.scene.add(ball);
+        //var ball = new Ball(0,Math.sqrt(4500)/40,0);
+        //this.scene.add(ball);
+        this.placeBalls();
         var axis = new THREE.AxisHelper(5);
         this.scene.add(axis);
 
     }
-
     createCamera() {
         'use strict';
 
@@ -190,7 +230,7 @@ class Game {
             });
             this.toggleWireframe = false;
         }
-
+        updateBall(this.clock);
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
