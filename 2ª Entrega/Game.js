@@ -30,7 +30,8 @@ class Game {
             x = Math.random()*(60-2*radius)-30+radius;
             y = radius;
             z = Math.random()*(30-2*radius)-15+radius;
-            balls[i]= new Ball(x,y,z,radius);
+            balls[i]= new Ball(x,y,z,radius,i);
+            console.log("creating "+balls[i])
         }
         while (colision==true){
             colision=false;
@@ -42,9 +43,10 @@ class Game {
                         }
                         x = Math.random()*(60-2*radius)-30+radius;
                         y = radius;
-                        z = Math.random()*(30-2*radius)-15+radius;
                         console.log("colision");
-                        balls[i] = new Ball(x,y,z,radius);
+                        z = Math.random()*(30-2*radius)-15+radius;
+                        balls[i] = new Ball(x,y,z,radius,i);
+                        console.log("creating "+balls[i])
                         colision=true;
                     }
                 }
@@ -100,40 +102,27 @@ class Game {
         switch (e.keyCode) {
             case 65: //A
             case 97: //a
-                this.toggleWireframe = true;
                 break;
 
             case 49: //1
-                this.camaraPos = [0, 75, 0];
-                this.changeCamara = true;
                 break;
 
             case 50: //2
-                this.camaraPos = [75, 0, 0];
-                this.changeCamara = true;
                 break;
 
             case 51: //3
-                this.camaraPos = [0, 0, 75];
-                this.changeCamara = true;
                 break;
 
             case 37: //esquerda
-                this.scene.getObjectByName("chair").angle = 1/100 * Math.PI;
                 break;
 
             case 38: // cima
-                this.scene.getObjectByName("chair").acceleration = 5;
-                this.scene.getObjectByName("chair").decelerating = false;
                 break;
 
             case 39: // direita
-                this.scene.getObjectByName("chair").angle = -1/100 * Math.PI;
                 break;
 
             case 40: // baixo
-                this.scene.getObjectByName("chair").acceleration = -5;
-                this.scene.getObjectByName("chair").decelerating = false;
                 break;
 
             default:
@@ -146,21 +135,12 @@ class Game {
 
         switch (e.keyCode) {
             case 37: //esquerda
-                this.scene.getObjectByName("chair").angle = 0;
                 break;
 
             case 38: // cima
             case 40: // baixo
-                if (this.scene.getObjectByName("chair").velocity >= 0) {
-                    this.scene.getObjectByName("chair").acceleration = -5;
-                } else {
-                    this.scene.getObjectByName("chair").acceleration = 5;
-                }
-                this.scene.getObjectByName("chair").decelerating = true;
                 break;
-
             case 39: // direita
-                this.scene.getObjectByName("chair").angle = 0;
                 break;
 
             default:
@@ -230,7 +210,10 @@ class Game {
             });
             this.toggleWireframe = false;
         }
-        updateBall(this.clock);
+        var delta = this.clock.getDelta()
+        for(var i=0; i<10; i++){
+            this.scene.getObjectByName("ball"+i).updateBall(delta);
+        }
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );

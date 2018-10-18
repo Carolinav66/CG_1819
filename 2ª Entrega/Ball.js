@@ -1,14 +1,14 @@
 class Ball extends GraphicEntity {
-    constructor(x, y, z,radius) {
+    constructor(x, y, z,radius,id) {
         'use strict';
 
         super(x, y, z,
             new THREE.MeshBasicMaterial({ color: 0xaedfff, wireframe: true }),
-            "table");
+            "ball"+id);
         this.radius = radius;
-        var angle = Math.random()*2*Math.PI
+        var angle = Math.random()*2*Math.PI;
+        this.velocity = new THREE.Vector3(1,0,0);
         this.addBall(x,y,z,angle);
-        this.velocity = (Math.cos(angle),0,Math.sin(angle))
     }
 
     addBall(x,y,z,angle){
@@ -26,7 +26,6 @@ class Ball extends GraphicEntity {
         var distance = Math.sqrt((this.position.x-ball.position.x)*(this.position.x-ball.position.x)
             +(this.position.y-ball.position.y)*(this.position.y-ball.position.y)
             +(this.position.z-ball.position.z)*(this.position.z-ball.position.z));
-        console.log(distance)
         if (distance < this.radius*2){
             return true;
         } else {
@@ -34,8 +33,7 @@ class Ball extends GraphicEntity {
         }
     }
 
-    updateBall(clock){
-        var delta = clock.getDelta()
+    updateBall(delta){
         var x = delta*1
         this.translateOnAxis(this.velocity, x);
     }
