@@ -10,15 +10,15 @@ class GraphicEntity extends THREE.Object3D {
         this.name = name;
     }
 
-    updatePosition(dx,dy,dz){
+    updatePosition(dx, dy, dz){
         this.position.x += dx;
         this.position.y += dy;
         this.position.z += dz;
     }
 
-    updatePosition(vector,delta){
-        this.position.x += vector.x *delta;
-        this.position.y += vector.y *delta;
-        this.position.z += vector.z *delta;
+    updatePosition(vector, delta){
+        this.position.x += vector.x * delta;
+        this.position.y += vector.y * delta;
+        this.position.z += vector.z * delta;
     }
 }

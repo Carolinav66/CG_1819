@@ -12,12 +12,12 @@ class Game {
         this.changeCamara = false;
         this.toggleWireframe = false;
 
+        this.balls = [];
+
     }
 
     placeBalls() {
         'use strict';
-        var balls = []
-        console.log("colision");
 
         var radius = Math.sqrt(4500) / 20;
         var colision = true;
@@ -30,33 +30,91 @@ class Game {
             x = Math.random() * (60 - 2 * radius) - 30 + radius;
             y = radius;
             z = Math.random() * (30 - 2 * radius) - 15 + radius;
-            balls[i] = new Ball(x, y, z, radius, i);
-            console.log("creating " + balls[i])
+            this.balls[i] = new Ball(x, y, z, radius, i);
+            console.log("creating " + this.balls[i])
         }
         while(colision == true) {
-            colision = false;
-            for(var i = 0; i < 10; i++) {
-                for(var j = 0; j < 10; j++) {
-                    if(balls[i].ballColiding(balls[j])) {
-                        if(i == j){
-                            continue;
-                        }
-                        x = Math.random() * (60 - 2 * radius) - 30 + radius;
-                        y = radius;
-                        console.log("colision");
-                        z = Math.random() * (30 - 2 * radius) - 15 + radius;
-                        balls[i] = new Ball(x, y, z, radius, i);
-                        console.log("creating " + balls[i])
-                        colision = true;
-                    }
-                }
-            }
+            colision = this.checkCollisions(this.substituteBall.bind(this))
         }
 
         for(var i = 0; i < 10; i++){
-            this.scene.add(balls[i])
+            this.scene.add(this.balls[i])
         }
     }
+
+    checkCollisions(func) {
+        var colision = false
+        for(var i = 0; i < 10; i++) {
+            for(var j = 0; j < 10; j++) {
+                if(this.balls[i].ballColiding(this.balls[j])) {
+                    if(i == j){
+                        continue;
+                    }
+                    colision = func(i, j);
+                }
+            }
+        }
+        return colision;
+    }
+
+    substituteBall(i) {
+        'use strict';
+
+        var radius = this.balls[i].radius;
+        var x = Math.random() * (60 - 2 * radius) - 30 + radius;
+        var y = radius;
+        var z = Math.random() * (30 - 2 * radius) - 15 + radius;
+
+        this.balls[i] = new Ball(x, y, z, radius, i);
+
+        return true;
+    }
+
+    collide(i, j) {
+        'use strict';
+
+        if (j < i) {
+            return;
+        }
+
+        if (this.balls[i].ballDistance(this.balls[j]) < 2 * this.balls[i].radius) {
+            var x = -(2 * this.balls[i].radius - this.balls[i].ballDistance(this.balls[j])) / 2;
+
+            this.balls[i].updatePosition(this.balls[i].velocity, x);
+            this.balls[j].updatePosition(this.balls[j].velocity, x);
+        }
+
+        var v1 = this.balls[i].velocity;
+        var v2 = this.balls[j].velocity;
+
+        this.balls[i].velocity = v2;
+        this.balls[j].velocity = v1;
+
+
+        /*var c1 = [this.balls[i].position.x, this.balls[i].position.y, this.balls[i].position.z];
+        var c2 = [this.balls[j].position.x, this.balls[j].position.y, this.balls[j].position.z];
+
+        var m1 = 1;
+        var m2 = 1;
+
+        var dist = this.pointDistance(c1, c2);
+        var vDiff = v2.distanceTo(v1);
+
+        var cNorm = Math.sqrt(dist[0]**2, dist[1]**2, dist[2]**2);
+        var interProd = dist[0] * vDiff.x + dist[1] * vDiff.y + dist[2] * vDiff.z;
+
+        var scalar = ( (2 * m2) / (m1 + m2) ) * ( interProd / cNorm**2 );
+        var aux = [dist[0] * scalar, dist[1] * scalar, dist[2] * scalar];
+
+        var new_v1 = new THREE.Vector3( v1.x - aux[0],  v1.y - aux[1], v1.z - aux[2]);*/
+
+        
+    }
+
+    pointDistance(a, b) {
+        return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+    }
+
     createScene() {
         'use strict';
 
@@ -210,7 +268,8 @@ class Game {
             });
             this.toggleWireframe = false;
         }
-        var delta = this.clock.getDelta()
+        var delta = this.clock.getDelta();
+        this.checkCollisions(this.collide.bind(this));
         for(var i = 0; i < 10; i++) {
             this.scene.getObjectByName("ball" + i).updateBall(delta);
         }

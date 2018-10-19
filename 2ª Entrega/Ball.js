@@ -24,14 +24,18 @@ class Ball extends GraphicEntity {
 
     ballColiding(ball) {
         'use strict';
-        var distance = Math.sqrt((this.position.x-ball.position.x)*(this.position.x-ball.position.x)
-            +(this.position.y-ball.position.y)*(this.position.y-ball.position.y)
-            +(this.position.z-ball.position.z)*(this.position.z-ball.position.z));
-        if (distance < 2 * this.radius){
+        var distance = this.ballDistance(ball);
+        if (distance <= 2 * this.radius) {
             return true;
         } else {
             return false;
         }
+    }
+
+    ballDistance(ball) {
+        return Math.sqrt((this.position.x-ball.position.x)*(this.position.x-ball.position.x)
+                        +(this.position.y-ball.position.y)*(this.position.y-ball.position.y)
+                        +(this.position.z-ball.position.z)*(this.position.z-ball.position.z));
     }
 
     updateBall(delta) {
@@ -40,7 +44,7 @@ class Ball extends GraphicEntity {
         for (var i = 0; i < this.children.length; i++) {
             //console.log(this.children[i]," is mesh? ",this.children[i].isMesh)
             if (this.children[i] instanceof THREE.Mesh) {
-                console.log("ROLANDO");
+                //console.log("ROLANDO");
                 this.children[i].rotation.z+=-delta;
             }
         }
