@@ -19,41 +19,41 @@ class Game {
         var balls = []
         console.log("colision");
 
-        var radius = Math.sqrt(4500)/20;
-        var colision=true;
+        var radius = Math.sqrt(4500) / 20;
+        var colision = true;
 
-        var x = Math.random()*(60-2*radius)-30+radius;
-        var y = radius;
-        var z = Math.random()*(30-2*radius)-15+radius;
+        var x; //= Math.random() * (60 - 2 * radius) - 30 + radius;
+        var y; //= radius;
+        var z; //= Math.random() * (30 - 2 * radius) - 15 + radius;
 
-        for(var i=0; i<10; i++){
-            x = Math.random()*(60-2*radius)-30+radius;
+        for(var i = 0; i < 10; i++) {
+            x = Math.random() * (60 - 2 * radius) - 30 + radius;
             y = radius;
-            z = Math.random()*(30-2*radius)-15+radius;
-            balls[i]= new Ball(x,y,z,radius,i);
-            console.log("creating "+balls[i])
+            z = Math.random() * (30 - 2 * radius) - 15 + radius;
+            balls[i] = new Ball(x, y, z, radius, i);
+            console.log("creating " + balls[i])
         }
-        while (colision==true){
-            colision=false;
-            for(var i=0; i<10; i++){
-                for(var j=0; j<10; j++){
-                    if(balls[i].ballColiding(balls[j])){
-                        if (i==j){
+        while(colision == true) {
+            colision = false;
+            for(var i = 0; i < 10; i++) {
+                for(var j = 0; j < 10; j++) {
+                    if(balls[i].ballColiding(balls[j])) {
+                        if(i == j){
                             continue;
                         }
-                        x = Math.random()*(60-2*radius)-30+radius;
+                        x = Math.random() * (60 - 2 * radius) - 30 + radius;
                         y = radius;
                         console.log("colision");
-                        z = Math.random()*(30-2*radius)-15+radius;
-                        balls[i] = new Ball(x,y,z,radius,i);
-                        console.log("creating "+balls[i])
-                        colision=true;
+                        z = Math.random() * (30 - 2 * radius) - 15 + radius;
+                        balls[i] = new Ball(x, y, z, radius, i);
+                        console.log("creating " + balls[i])
+                        colision = true;
                     }
                 }
             }
         }
 
-        for(var i=0; i<10; i++){
+        for(var i = 0; i < 10; i++){
             this.scene.add(balls[i])
         }
     }
@@ -76,9 +76,10 @@ class Game {
 
         var aspectConstant = 50;
 
-        this.camera = new THREE.PerspectiveCamera(45,1.4,
-                                                    1,
-                                                    1000);
+        this.camera = new THREE.PerspectiveCamera(45, 
+                                                  1.4,
+                                                  1,
+                                                  1000);
         this.camera.position.x = this.camaraPos[0];
         this.camera.position.y = this.camaraPos[1];
         this.camera.position.z = this.camaraPos[2];
@@ -205,14 +206,13 @@ class Game {
 
                 if (node instanceof THREE.Mesh) {
                     node.material.wireframe = !node.material.wireframe;
-                    console.log("pi");
                 }
             });
             this.toggleWireframe = false;
         }
         var delta = this.clock.getDelta()
-        for(var i=0; i<10; i++){
-            this.scene.getObjectByName("ball"+i).updateBall(delta);
+        for(var i = 0; i < 10; i++) {
+            this.scene.getObjectByName("ball" + i).updateBall(delta);
         }
         this.controls.update();
         this.render();

@@ -5,13 +5,14 @@ class Ball extends GraphicEntity {
         super(x, y, z,
             new THREE.MeshBasicMaterial({ color: 0xaedfff, wireframe: true }),
             "ball"+id);
+
         this.radius = radius;
-        var angle = Math.random()*2*Math.PI;
-        this.addBall(x,y,z,angle);
+        var angle = Math.random() * 2 * Math.PI;
+        this.addBall(angle);
         this.velocity = new THREE.Vector3(Math.cos(angle),0,Math.sin(angle));
     }
 
-    addBall(x,y,z,angle){
+    addBall(angle) {
         'use strict';
         var axis = new THREE.AxisHelper(6);
         var geometry = new THREE.SphereGeometry(this.radius, 15, 15);
@@ -21,25 +22,25 @@ class Ball extends GraphicEntity {
         this.add(axis);
     }
 
-    ballColiding(ball){
+    ballColiding(ball) {
         'use strict';
         var distance = Math.sqrt((this.position.x-ball.position.x)*(this.position.x-ball.position.x)
             +(this.position.y-ball.position.y)*(this.position.y-ball.position.y)
             +(this.position.z-ball.position.z)*(this.position.z-ball.position.z));
-        if (distance < this.radius*2){
+        if (distance < 2 * this.radius){
             return true;
         } else {
             return false;
         }
     }
 
-    updateBall(delta){
-        var x = delta*Math.PI*2;
-        this.updatePosition(this.velocity,x);
+    updateBall(delta) {
+        var x = delta * Math.PI * 2;
+        this.updatePosition(this.velocity, x);
         for (var i = 0; i < this.children.length; i++) {
             //console.log(this.children[i]," is mesh? ",this.children[i].isMesh)
             if (this.children[i] instanceof THREE.Mesh) {
-                console.log("ROLANDO")
+                console.log("ROLANDO");
                 this.children[i].rotation.z+=-delta;
             }
         }
