@@ -34,12 +34,14 @@ class Ball extends GraphicEntity {
     }
 
     ballDistance(ball) {
+        'use strict';
         return Math.sqrt((this.position.x-ball.position.x)*(this.position.x-ball.position.x)
                         +(this.position.y-ball.position.y)*(this.position.y-ball.position.y)
                         +(this.position.z-ball.position.z)*(this.position.z-ball.position.z));
     }
 
     updateBall(delta) {
+        'use strict';
         var x = delta * Math.PI * 2 * this.speed;
         this.updatePosition(this.velocity, x);
         for (var i = 0; i < this.children.length; i++) {
@@ -50,4 +52,5 @@ class Ball extends GraphicEntity {
             }
         }
     }
+    
 }

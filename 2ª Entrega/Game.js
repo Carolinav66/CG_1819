@@ -33,19 +33,21 @@ class Game {
             y = radius;
             z = Math.random() * (30 - 2 * radius) - 15 + radius;
             this.balls[i] = new Ball(x, y, z, radius, i);
-            console.log("creating " + this.balls[i])
+            console.log("creating " + this.balls[i]);
         }
         while(collision == true) {
-            collision = this.checkCollisions(this.substituteBall.bind(this))
+            collision = this.checkCollisions(this.substituteBall.bind(this));
         }
 
-        for(var i = 0; i < this.numberOfBalls; i++){
-            this.scene.add(this.balls[i])
+        for(var i = 0; i < this.numberOfBalls; i++) {
+            this.scene.add(this.balls[i]);
         }
     }
 
     checkCollisions(func) {
-        var collision = false
+        'use strict'
+
+        var collision = false;
         for(var i = 0; i < this.numberOfBalls; i++) {
             for(var j = 0; j < this.numberOfBalls; j++) {
                 if(this.balls[i].ballColliding(this.balls[j])) {
@@ -136,9 +138,10 @@ class Game {
         
     }
 
-    pointDistance(a, b) {
+    /*pointDistance(a, b) {
+        'use strict';
         return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-    }
+    }*/
 
     createScene() {
         'use strict';
@@ -168,16 +171,16 @@ class Game {
         this.camera.position.z = this.camaraPos[2];
 
         this.camera.lookAt(this.scene.position);
-
     }
 
     changeCameraPosition() {
+        'use strict';
+
         this.camera.position.x = this.camaraPos[0];
         this.camera.position.y = this.camaraPos[1];
         this.camera.position.z = this.camaraPos[2];
 
         this.camera.lookAt(this.scene.position);
-
     }
 
     onKeyDown(e) {
@@ -278,6 +281,8 @@ class Game {
     }
 
     animate() {
+        'use strict';
+
         if (this.changeCamara) {
             this.changeCameraPosition();
             this.changeCamara = false;

@@ -17,6 +17,8 @@ class Field extends GraphicEntity {
     }
 
     checkCollisionsX(ball) {
+        'use strict';
+        
         if (ball.position.x + ball.radius >= this.wallX || ball.position.x - ball.radius <= -this.wallX) {
             return -1;
         } else {
@@ -25,6 +27,8 @@ class Field extends GraphicEntity {
     }
 
     checkCollisionsZ(ball) {
+        'use strict';
+
         if (ball.position.z + ball.radius >= this.wallZ || ball.position.z - ball.radius <= -this.wallZ) {
             return -1;
         } else {
@@ -37,7 +41,7 @@ class Field extends GraphicEntity {
 
         var geometry = new THREE.BoxGeometry(60, 30, 0);
         var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: false }));
-        mesh.rotation.x += Math.PI/2
+        mesh.rotation.x += Math.PI/2;
         mesh.position.set(x, y, z);
         this.add(mesh);
     }
@@ -48,7 +52,7 @@ class Field extends GraphicEntity {
         var geometry = new THREE.BoxGeometry(30, Math.sqrt(4500)/10, 0);
         var mesh = new THREE.Mesh(geometry, this.material);
         mesh.position.set(x, y, z);
-        mesh.rotation.y += Math.PI/2
+        mesh.rotation.y += Math.PI/2;
         this.add(mesh);
     }
     addFieldFrontWall(x, y, z) {
