@@ -3,7 +3,7 @@ class Field extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: true }),
+            new THREE.MeshBasicMaterial({ color: 0xc56836 /*0xff09e5*/, wireframe: false }),
             "table");
 
         this.wallX = 30;
@@ -35,8 +35,8 @@ class Field extends GraphicEntity {
     addFieldFloor(x, y, z) {
         'use strict';
 
-        var geometry = new THREE.PlaneGeometry(60, 30);
-        var mesh = new THREE.Mesh(geometry, this.material);
+        var geometry = new THREE.BoxGeometry(60, 30, 0);
+        var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: false }));
         mesh.rotation.x += Math.PI/2
         mesh.position.set(x, y, z);
         this.add(mesh);
@@ -45,7 +45,7 @@ class Field extends GraphicEntity {
     addFieldSideWall(x, y, z) {
         'use strict';
 
-        var geometry = new THREE.PlaneGeometry(30, Math.sqrt(4500)/10);
+        var geometry = new THREE.BoxGeometry(30, Math.sqrt(4500)/10, 0);
         var mesh = new THREE.Mesh(geometry, this.material);
         mesh.position.set(x, y, z);
         mesh.rotation.y += Math.PI/2
@@ -54,7 +54,7 @@ class Field extends GraphicEntity {
     addFieldFrontWall(x, y, z) {
         'use strict';
 
-        var geometry = new THREE.PlaneGeometry(60, Math.sqrt(4500)/10);
+        var geometry = new THREE.BoxGeometry(60, Math.sqrt(4500)/10, 0);
         var mesh = new THREE.Mesh(geometry, this.material);
         mesh.position.set(x, y, z);
         this.add(mesh);
