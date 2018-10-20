@@ -3,14 +3,14 @@ class Ball extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            new THREE.MeshBasicMaterial({ color: 0xaedfff, wireframe: false }),
+            new THREE.MeshBasicMaterial({ color: 0xaedfff, wireframe: true }),
             "ball"+id);
 
         this.radius = radius;
         var angle = Math.random() * 2 * Math.PI;
         this.addBall(angle);
         this.velocity = new THREE.Vector3(Math.cos(angle),0,Math.sin(angle));
-        this.speed = 3; //Math.random() * 10;
+        this.speed = Math.random()*2+1; //Math.random() * 10;
     }
 
     addBall(angle) {
@@ -43,14 +43,21 @@ class Ball extends GraphicEntity {
     updateBall(delta) {
         'use strict';
         var x = delta * Math.PI * 2 * this.speed;
+        var angle = Math.acos(this.velocity.x);
+        if (this.velocity.z > 0){
+            angle *= -1
+        }
+        this.rotation.y=angle;//angle+Math.PI/2;
         this.updatePosition(this.velocity, x);
         for (var i = 0; i < this.children.length; i++) {
             //console.log(this.children[i]," is mesh? ",this.children[i].isMesh)
             if (this.children[i] instanceof THREE.Mesh) {
                 //console.log("ROLANDO");
-                this.children[i].rotation.z+=-delta;
+                //this.children[i].rotation.x+=-delta*this.velocity.z;
+                //this.children[i].rotation.z+=-delta*this.velocity.x;
+                this.children[i].rotation.z+=-delta*this.speed;
             }
         }
     }
-    
+
 }

@@ -4,21 +4,21 @@ class Field extends GraphicEntity {
 
         super(x, y, z,
             new THREE.MeshBasicMaterial({ color: 0xc56836 /*0xff09e5*/, wireframe: false }),
-            "table");
+            "field");
 
         this.wallX = 30;
         this.wallZ = 15;
 
         this.addFieldFloor(0, 0, 0);
-        this.addFieldSideWall(30, Math.sqrt(4500)/20, 0);
-        this.addFieldSideWall(-30, Math.sqrt(4500)/20, 0);
-        this.addFieldFrontWall(0, Math.sqrt(4500)/20, 15);
-        this.addFieldFrontWall(0, Math.sqrt(4500)/20, -15);
+        this.addFieldSideWall(30, Math.sqrt(4500)/20, 0, "right");
+        this.addFieldSideWall(-30, Math.sqrt(4500)/20, 0, "left");
+        this.addFieldFrontWall(0, Math.sqrt(4500)/20, 15, "bottom");
+        this.addFieldFrontWall(0, Math.sqrt(4500)/20, -15, "top");
     }
 
     checkCollisionsX(ball) {
         'use strict';
-        
+
         if (ball.position.x + ball.radius >= this.wallX || ball.position.x - ball.radius <= -this.wallX) {
             return -1;
         } else {
@@ -36,31 +36,38 @@ class Field extends GraphicEntity {
         }
     }
 
-    addFieldFloor(x, y, z) {
+    addFieldFloor(x, y, z, side) {
         'use strict';
 
         var geometry = new THREE.BoxGeometry(60, 30, 0);
-        var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: false }));
+        var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0x9f3305, wireframe: false }));
         mesh.rotation.x += Math.PI/2;
-        mesh.position.set(x, y, z);
         this.add(mesh);
     }
 
-    addFieldSideWall(x, y, z) {
+    addFieldSideWall(x, y, z, side) {
         'use strict';
 
-        var geometry = new THREE.BoxGeometry(30, Math.sqrt(4500)/10, 0);
+        var geometry = new THREE.BoxGeometry(32, Math.sqrt(4500)/10, 1);
         var mesh = new THREE.Mesh(geometry, this.material);
-        mesh.position.set(x, y, z);
+        if (side == "right"){
+            mesh.position.set(x+0.5, y, z);
+        } else if (side == "left"){
+            mesh.position.set(x-0.5, y, z);
+        }
         mesh.rotation.y += Math.PI/2;
         this.add(mesh);
     }
-    addFieldFrontWall(x, y, z) {
+    addFieldFrontWall(x, y, z,side) {
         'use strict';
 
-        var geometry = new THREE.BoxGeometry(60, Math.sqrt(4500)/10, 0);
+        var geometry = new THREE.BoxGeometry(62, Math.sqrt(4500)/10, 1);
         var mesh = new THREE.Mesh(geometry, this.material);
-        mesh.position.set(x, y, z);
+        if (side=="top"){
+            mesh.position.set(x, y, z-0.5);
+        } else if (side="bottom"){
+            mesh.position.set(x, y, z+0.5);
+        }
         this.add(mesh);
     }
 

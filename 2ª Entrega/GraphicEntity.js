@@ -17,6 +17,8 @@ class GraphicEntity extends THREE.Object3D {
     }
 
     updatePosition(vector, delta){
+        vector.divideScalar(vector.length());
+        console.log(vector.length())
         this.position.x += vector.x * delta;
         this.position.y += vector.y * delta;
         this.position.z += vector.z * delta;

@@ -57,7 +57,7 @@ class Game {
                     collision = func(i, j);
                 }
             }
-            this.collisionWithWall(i, this.field.checkCollisionsX(this.balls[i]), 
+            this.collisionWithWall(i, this.field.checkCollisionsX(this.balls[i]),
                                       this.field.checkCollisionsZ(this.balls[i]));
         }
         return collision;
@@ -99,10 +99,13 @@ class Game {
             return;
         }
 
-        var x = -(2 * this.balls[i].radius - this.balls[i].ballDistance(this.balls[j])) / 2;
+        var x = (2 * this.balls[i].radius - this.balls[i].ballDistance(this.balls[j])) / 2+0.01;
+        var bounceDirection = new THREE.Vector3(this.balls[j].position.x - this.balls[i].position.x,
+                                                0,
+                                                this.balls[j].position.z - this.balls[i].position.z)
 
-        this.balls[i].updatePosition(this.balls[i].velocity, x);
-        this.balls[j].updatePosition(this.balls[j].velocity, x);
+        this.balls[i].updatePosition(bounceDirection, -x);
+        this.balls[j].updatePosition(bounceDirection, x);
 
         /* if(this.balls[i].ballDistance(this.balls[j]) < 2 * this.balls[i].radius) {
             var x = -(2 * this.balls[i].radius - this.balls[i].ballDistance(this.balls[j])) / 2;
@@ -111,12 +114,17 @@ class Game {
             this.balls[j].updatePosition(this.balls[j].velocity, x);
         } */
 
-        var v1 = this.balls[i].velocity;
         var v2 = this.balls[j].velocity;
+        var v1 = this.balls[i].velocity;
 
         this.balls[i].velocity = v2;
         this.balls[j].velocity = v1;
 
+        var s2 = this.balls[j].speed;
+        var s1 = this.balls[i].speed;
+
+        this.balls[i].speed = s2;
+        this.balls[j].speed = s1;
 
         /*var c1 = [this.balls[i].position.x, this.balls[i].position.y, this.balls[i].position.z];
         var c2 = [this.balls[j].position.x, this.balls[j].position.y, this.balls[j].position.z];
@@ -135,7 +143,7 @@ class Game {
 
         var new_v1 = new THREE.Vector3( v1.x - aux[0],  v1.y - aux[1], v1.z - aux[2]);*/
 
-        
+
     }
 
     /*pointDistance(a, b) {
@@ -162,7 +170,7 @@ class Game {
 
         var aspectConstant = 50;
 
-        this.camera = new THREE.PerspectiveCamera(45, 
+        this.camera = new THREE.PerspectiveCamera(45,
                                                   1.4,
                                                   1,
                                                   1000);
