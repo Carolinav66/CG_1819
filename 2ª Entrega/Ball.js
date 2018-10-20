@@ -22,7 +22,7 @@ class Ball extends GraphicEntity {
         this.add(axis);
     }
 
-    ballColiding(ball) {
+    ballColliding(ball) {
         'use strict';
         var distance = this.ballDistance(ball);
         if (distance <= 2 * this.radius) {

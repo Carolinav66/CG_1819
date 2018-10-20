@@ -22,7 +22,7 @@ class Game {
         'use strict';
 
         var radius = Math.sqrt(4500) / 20;
-        var colision = true;
+        var collision = true;
 
         var x; //= Math.random() * (60 - 2 * radius) - 30 + radius;
         var y; //= radius;
@@ -35,8 +35,8 @@ class Game {
             this.balls[i] = new Ball(x, y, z, radius, i);
             console.log("creating " + this.balls[i])
         }
-        while(colision == true) {
-            colision = this.checkCollisions(this.substituteBall.bind(this))
+        while(collision == true) {
+            collision = this.checkCollisions(this.substituteBall.bind(this))
         }
 
         for(var i = 0; i < this.numberOfBalls; i++){
@@ -45,28 +45,34 @@ class Game {
     }
 
     checkCollisions(func) {
-        var colision = false
+        var collision = false
         for(var i = 0; i < this.numberOfBalls; i++) {
             for(var j = 0; j < this.numberOfBalls; j++) {
-                if(this.balls[i].ballColiding(this.balls[j])) {
-                    if(i == j){
+                if(this.balls[i].ballColliding(this.balls[j])) {
+                    if(i == j) {
                         continue;
                     }
-                    colision = func(i, j);
+                    collision = func(i, j);
                 }
             }
-            if(this.field.checkCollisionsX(this.balls[i])) {
-                this.colisionWithWall(i, -1, 1);
-            }
-            if(this.field.checkCollisionsZ(this.balls[i])) {
-                this.colisionWithWall(i, 1, -1);
-            }
+            this.collisionWithWall(i, this.field.checkCollisionsX(this.balls[i]), 
+                                      this.field.checkCollisionsZ(this.balls[i]));
         }
-        return colision;
+        return collision;
     }
 
-    colisionWithWall(i, x, z) {
-        var aux = this.balls[i].velocity.x;
+    collisionWithWall(i, x, z) {
+        'use strict';
+
+        if(-1 == x) {
+            var disp = -(this.balls[i].radius - ( this.field.wallX - Math.abs(this.balls[i].position.x) ));
+            this.balls[i].updatePosition(this.balls[i].velocity, disp);
+        }
+        if(-1 == z) {
+            var disp = -(this.balls[i].radius - ( this.field.wallZ - Math.abs(this.balls[i].position.z) ));
+            this.balls[i].updatePosition(this.balls[i].velocity, disp);
+        }
+
         this.balls[i].velocity.x *= x;
         this.balls[i].velocity.z *= z;
     }

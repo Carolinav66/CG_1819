@@ -18,15 +18,17 @@ class Field extends GraphicEntity {
 
     checkCollisionsX(ball) {
         if (ball.position.x + ball.radius >= this.wallX || ball.position.x - ball.radius <= -this.wallX) {
-            console.log("hey");
-            return true;
+            return -1;
+        } else {
+            return 1;
         }
     }
 
     checkCollisionsZ(ball) {
         if (ball.position.z + ball.radius >= this.wallZ || ball.position.z - ball.radius <= -this.wallZ) {
-            console.log("oi");
-            return true;
+            return -1;
+        } else {
+            return 1;
         }
     }
 
