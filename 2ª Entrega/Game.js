@@ -8,9 +8,13 @@ class Game {
         this.aspect = [window.innerWidth, window.innerHeight];
         this.ratio = window.innerWidth / window.innerHeight;
 
-        this.camaraPos = [0, 75, 0];
+        this.camaraPos1 = [0, 75, 0];
+        this.camaraPos2 = [50, 50, 50];
+
+
         this.changeCamara = false;
         this.toggleWireframe = false;
+        this.cameraNumber = 1;
 
         this.numberOfBalls = 10;
         this.balls = [];
@@ -165,30 +169,81 @@ class Game {
         this.scene.add(axis);
 
     }
-    createCamera() {
+
+    createCamera1() {
         'use strict';
 
         var aspectConstant = 50;
 
-        this.camera = new THREE.PerspectiveCamera(45,
-                                                  1.4,
-                                                  1,
-                                                  1000);
-        this.camera.position.x = this.camaraPos[0];
-        this.camera.position.y = this.camaraPos[1];
-        this.camera.position.z = this.camaraPos[2];
+        this.cameraNumber = 1;
 
-        this.camera.lookAt(this.scene.position);
+        this.camera1 = new THREE.OrthographicCamera(-aspectConstant * this.ratio,
+                                                    aspectConstant * this.ratio,
+                                                    aspectConstant,
+                                                   -aspectConstant,
+                                                    1,
+                                                    1000);
+        this.camera1.position.x = this.camaraPos1[0];
+        this.camera1.position.y = this.camaraPos1[1];
+        this.camera1.position.z = this.camaraPos1[2];
+
+        this.camera1.lookAt(this.scene.position);
+
     }
 
-    changeCameraPosition() {
+    createCamera2() {
         'use strict';
 
-        this.camera.position.x = this.camaraPos[0];
-        this.camera.position.y = this.camaraPos[1];
-        this.camera.position.z = this.camaraPos[2];
+        var aspectConstant = 50;
 
-        this.camera.lookAt(this.scene.position);
+        this.cameraNumber = 2;
+
+        this.camera2 = new THREE.PerspectiveCamera(45,
+                                                  window.innerWidth / window.innerHeight,
+                                                  1,
+                                                  1000);
+        this.camera2.position.x = this.camaraPos2[0];
+        this.camera2.position.y = this.camaraPos2[1];
+        this.camera2.position.z = this.camaraPos2[2];
+
+        this.camera2.lookAt(this.scene.position);
+    }
+
+    createCamera3() {
+        'use strict';
+
+        var aspectConstant = 50;
+
+        this.cameraNumber = 3;
+
+        this.camera3 = new THREE.PerspectiveCamera(90,
+                                                  window.innerWidth / window.innerHeight,
+                                                  1,
+                                                  1000);
+        this.camera3.position.x = this.balls[0].position.x;
+        this.camera3.position.y = this.balls[0].position.y + 10;
+        this.camera3.position.z = this.balls[0].position.z + 10;
+
+        this.camera3.lookAt(this.balls[0].position);
+    }
+
+
+    changeCamera() {
+        'use strict';
+
+        if(this.cameraNumber == 1){
+          this.camera = this.camera1;
+        }
+
+        if(this.cameraNumber == 2){
+          this.camera = this.camera2;
+        }
+
+        if(this.cameraNumber == 3){
+          this.camera = this.camera3;
+        }
+
+        this.changeCamara = false;
     }
 
     onKeyDown(e) {
@@ -200,24 +255,18 @@ class Game {
                 break;
 
             case 49: //1
+                this.cameraNumber = 1;
+                this.changeCamara = true;
                 break;
 
             case 50: //2
+                this.cameraNumber = 2;
+                this.changeCamara = true;
                 break;
 
             case 51: //3
-                break;
-
-            case 37: //esquerda
-                break;
-
-            case 38: // cima
-                break;
-
-            case 39: // direita
-                break;
-
-            case 40: // baixo
+                this.cameraNumber = 3;
+                this.changeCamara = true;
                 break;
 
             default:
@@ -225,41 +274,45 @@ class Game {
         }
     }
 
-    onKeyUp(e) {
-        'use strict';
-
-        switch (e.keyCode) {
-            case 37: //esquerda
-                break;
-
-            case 38: // cima
-            case 40: // baixo
-                break;
-            case 39: // direita
-                break;
-
-            default:
-                break;
-        }
-    }
 
     onResize() {
         'use strict';
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        if(this.cameraNumber == 1){
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            //novo aspect
+            var newRatio = window.innerWidth / window.innerHeight;
+            var aspectConstant = 50;
 
-        //novo aspect
-        var newRatio = window.innerWidth / window.innerHeight;
-        var aspectConstant = 50;
-
-        if (window.innerHeight > 0 && window.innerWidth > 0) {
-            this.camera.left = -aspectConstant * newRatio;
-            this.camera.right = aspectConstant * newRatio;
-            this.camera.top = aspectConstant;
-            this.camera.bottom = -aspectConstant;
-            this.camera.updateProjectionMatrix();
+            if(window.innerHeight * newRatio < window.innerWidth){
+                if (window.innerHeight > 0 && window.innerWidth > 0) {
+                    this.camera.left = -aspectConstant * newRatio;
+                    this.camera.right = aspectConstant * newRatio;
+                    this.camera.top = aspectConstant;
+                    this.camera.bottom = -aspectConstant;
+                    this.camera.updateProjectionMatrix();
+                }
+            }
+            else{
+                if (window.innerHeight > 0 && window.innerWidth > 0) {
+                    this.camera.left = -aspectConstant;
+                    this.camera.right = aspectConstant;
+                    this.camera.top = aspectConstant * newRatio;
+                    this.camera.bottom = -aspectConstant * newRatio;
+                    this.camera.updateProjectionMatrix();
+                }
+            }
         }
 
+        if(this.cameraNumber == 2){
+
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+            if (window.innerHeight > 0 && window.innerWidth > 0) {
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+            }
+        }
     }
 
     render() {
@@ -278,13 +331,17 @@ class Game {
         document.body.appendChild(this.renderer.domElement);
 
         this.createScene();
-        this.createCamera(); //50, 50, 50
-        this.controls = new THREE.OrbitControls( this.camera );
+        this.createCamera1(); //50, 50, 50
+        this.createCamera2();
+        this.createCamera3();
+        this.controls = new THREE.OrbitControls( this.camera2 );
+
+        this.camera = this.camera1;
+        this.cameraNumber = 1;
 
         this.render();
         this.controls.update();
         window.addEventListener("keydown", this.onKeyDown.bind(this));
-        window.addEventListener("keyup", this.onKeyUp.bind(this));
         window.addEventListener("resize", this.onResize.bind(this));
     }
 
@@ -292,10 +349,15 @@ class Game {
         'use strict';
 
         if (this.changeCamara) {
-            this.changeCameraPosition();
+            this.changeCamera();
             this.changeCamara = false;
             this.onResize();
         }
+
+        this.camera3.position.x = this.balls[0].position.x;
+        this.camera3.position.y = this.balls[0].position.y + 10;
+        this.camera3.position.z = this.balls[0].position.z + 10;
+        this.camera3.lookAt(this.balls[0].position);
 
         if (this.toggleWireframe) {
             this.scene.traverse(function (node) {
@@ -311,6 +373,7 @@ class Game {
         for(var i = 0; i < this.numberOfBalls; i++) {
             this.scene.getObjectByName("ball" + i).updateBall(delta);
         }
+
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
