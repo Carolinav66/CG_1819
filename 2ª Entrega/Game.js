@@ -220,7 +220,7 @@ class Game {
 
         this.cameraNumber = 3;
 
-        this.camera3 = new THREE.PerspectiveCamera(90,
+        this.camera3 = new THREE.PerspectiveCamera(45,
                                                   window.innerWidth / window.innerHeight,
                                                   1,
                                                   1000);
@@ -335,6 +335,7 @@ class Game {
         this.camera = this.camera1;
         this.cameraNumber = 1;
 
+        this.onResize();
         this.render();
         this.controls.update();
         window.addEventListener("keydown", this.onKeyDown.bind(this));
