@@ -5,6 +5,10 @@ class Game {
         this.clock = new THREE.Clock();
         this.clock.start();
 
+        this.orthoCameraAspectRatio = 16 / 9;
+        this.orthoCameraWidth = 90//65;
+        this.orthoCameraHeight = this.orthoCameraWidth / this.orthoCameraAspectRatio;
+        
         this.aspect = [window.innerWidth, window.innerHeight];
         this.ratio = window.innerWidth / window.innerHeight;
 
@@ -177,10 +181,10 @@ class Game {
 
         this.cameraNumber = 1;
 
-        this.camera1 = new THREE.OrthographicCamera(-aspectConstant * this.ratio,
-                                                    aspectConstant * this.ratio,
-                                                    aspectConstant,
-                                                   -aspectConstant,
+        this.camera1 = new THREE.OrthographicCamera(-this.orthoCameraWidth / 2,
+                                                    this.orthoCameraWidth / 2,
+                                                    this.orthoCameraHeight / 2,
+                                                    -this.orthoCameraHeight / 2,
                                                     1,
                                                     1000);
         this.camera1.position.x = this.camaraPos1[0];
@@ -280,31 +284,23 @@ class Game {
 
         if(this.cameraNumber == 1){
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-            //novo aspect
-            var newRatio = window.innerWidth / window.innerHeight;
-            var aspectConstant = 50;
+            var windowRatio = window.innerWidth / window.innerHeight;
 
-            if(window.innerHeight * newRatio < window.innerWidth){
-                if (window.innerHeight > 0 && window.innerWidth > 0) {
-                    this.camera.left = -aspectConstant * newRatio;
-                    this.camera.right = aspectConstant * newRatio;
-                    this.camera.top = aspectConstant;
-                    this.camera.bottom = -aspectConstant;
-                    this.camera.updateProjectionMatrix();
-                }
+            if(windowRatio > this.orthoCameraAspectRatio) {
+                this.camera.left = -this.orthoCameraHeight * windowRatio / 2;
+                this.camera.right = this.orthoCameraHeight * windowRatio / 2;
+                this.camera.top = this.orthoCameraHeight / 2;
+                this.camera.bottom = -this.orthoCameraHeight / 2;
+            } else {
+                this.camera.left = -this.orthoCameraWidth / 2;
+                this.camera.right = this.orthoCameraWidth / 2;
+                this.camera.top = (this.orthoCameraWidth / windowRatio) / 2;
+                this.camera.bottom = -(this.orthoCameraWidth / windowRatio) / 2;
             }
-            else{
-                if (window.innerHeight > 0 && window.innerWidth > 0) {
-                    this.camera.left = -aspectConstant;
-                    this.camera.right = aspectConstant;
-                    this.camera.top = aspectConstant * newRatio;
-                    this.camera.bottom = -aspectConstant * newRatio;
-                    this.camera.updateProjectionMatrix();
-                }
-            }
+            this.camera.updateProjectionMatrix();
         }
 
-        if(this.cameraNumber == 2){
+        if(this.cameraNumber == 2 || this.cameraNumber == 3) {
 
             this.renderer.setSize(window.innerWidth, window.innerHeight);
 
