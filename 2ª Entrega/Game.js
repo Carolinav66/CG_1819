@@ -6,7 +6,7 @@ class Game {
         this.clock.start();
 
         this.orthoCameraAspectRatio = 16 / 9;
-        this.orthoCameraWidth = 90//65;
+        this.orthoCameraWidth = 90; //65;
         this.orthoCameraHeight = this.orthoCameraWidth / this.orthoCameraAspectRatio;
         
         this.aspect = [window.innerWidth, window.innerHeight];
@@ -14,11 +14,12 @@ class Game {
 
         this.camaraPos1 = [0, 75, 0];
         this.camaraPos2 = [50, 50, 50];
-
-
         this.changeCamara = false;
-        this.toggleWireframe = false;
         this.cameraNumber = 1;
+        
+        this.toggleAxes = false;
+
+        this.countUp = 0;
 
         this.numberOfBalls = 10;
         this.balls = [];
@@ -254,8 +255,9 @@ class Game {
         'use strict';
 
         switch (e.keyCode) {
-            case 65: //A
-            case 97: //a
+            case 69:  //E
+            case 101: //e
+                this.toggleAxes = true;
                 break;
 
             case 49: //1
@@ -356,19 +358,23 @@ class Game {
         this.camera3.position.z = this.balls[0].position.z + 10;
         this.camera3.lookAt(this.balls[0].position);
 
-        if (this.toggleWireframe) {
-            this.scene.traverse(function (node) {
-
-                if (node instanceof THREE.Mesh) {
-                    node.material.wireframe = !node.material.wireframe;
-                }
-            });
-            this.toggleWireframe = false;
+        if (this.toggleAxes) {
+            for (var i = 0; i < this.balls.length; i++) {
+                this.balls[i].toggleAxis();
+            }
+            this.toggleAxes = false;
         }
         var delta = this.clock.getDelta();
+        var speedUp = false;
+        this.countUp += delta;
+        if (this.countUp > 2) {
+            speedUp = true;
+            this.countUp = 0;
+        }
+
         this.checkCollisions(this.collide.bind(this));
         for(var i = 0; i < this.numberOfBalls; i++) {
-            this.scene.getObjectByName("ball" + i).updateBall(delta);
+            this.scene.getObjectByName("ball" + i).updateBall(delta, speedUp);
         }
 
         this.controls.update();

@@ -13,14 +13,22 @@ class Ball extends GraphicEntity {
         this.speed = Math.random()*2+1; //Math.random() * 10;
     }
 
+    toggleAxis() {
+        this.axis.visible = !this.axis.visible;
+    }
+
+    increaseSpeed() {
+        this.speed *= 1.1;
+    }
+
     addBall(angle) {
         'use strict';
-        var axis = new THREE.AxisHelper(6);
+        this.axis = new THREE.AxisHelper(6);
         var geometry = new THREE.SphereGeometry(this.radius, 15, 15);
         var mesh = new THREE.Mesh(geometry, this.material);
         this.rotation.y=angle;
         this.add(mesh);
-        this.add(axis);
+        this.add(this.axis);
     }
 
     ballColliding(ball) {
@@ -40,12 +48,12 @@ class Ball extends GraphicEntity {
                         +(this.position.z-ball.position.z)*(this.position.z-ball.position.z));
     }
 
-    updateBall(delta) {
+    updateBall(delta, speedUp) {
         'use strict';
         var x = delta * Math.PI * 2 * this.speed;
         var angle = Math.acos(this.velocity.x);
         if (this.velocity.z > 0){
-            angle *= -1
+            angle *= -1;
         }
         this.rotation.y=angle;//angle+Math.PI/2;
         this.updatePosition(this.velocity, x);
@@ -57,6 +65,11 @@ class Ball extends GraphicEntity {
                 //this.children[i].rotation.z+=-delta*this.velocity.x;
                 this.children[i].rotation.z+=-delta*this.speed;
             }
+        }
+        if (speedUp) {
+            this.increaseSpeed();
+            console.log("heyhey");
+
         }
     }
 
