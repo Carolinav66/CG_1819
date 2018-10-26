@@ -77,11 +77,19 @@ class Game {
 
         if(-1 == x) {
             var disp = -(this.balls[i].radius - ( this.field.wallX - Math.abs(this.balls[i].position.x) ));
-            this.balls[i].updatePosition(this.balls[i].velocity, disp);
+            if (this.balls[i].position.x > 0){
+                this.balls[i].updatePosition(new THREE.Vector3(1,0,0), disp);
+            } else {
+                this.balls[i].updatePosition(new THREE.Vector3(1,0,0), -disp)
+            }
         }
         if(-1 == z) {
             var disp = -(this.balls[i].radius - ( this.field.wallZ - Math.abs(this.balls[i].position.z) ));
-            this.balls[i].updatePosition(this.balls[i].velocity, disp);
+            if (this.balls[i].position.z > 0){
+                this.balls[i].updatePosition(new THREE.Vector3(0,0,1), disp);
+            } else {
+                this.balls[i].updatePosition(new THREE.Vector3(0,0,1), -disp)
+            }
         }
 
         this.balls[i].velocity.x *= x;
@@ -225,9 +233,9 @@ class Game {
                                                   window.innerWidth / window.innerHeight,
                                                   1,
                                                   1000);
-        this.camera3.position.x = this.balls[0].position.x;
+        this.camera3.position.x = this.balls[0].position.x - 10 *this.balls[0].velocity.x;
         this.camera3.position.y = this.balls[0].position.y + 10;
-        this.camera3.position.z = this.balls[0].position.z + 10;
+        this.camera3.position.z = this.balls[0].position.z - 10 *this.balls[0].velocity.z;
 
         this.camera3.lookAt(this.balls[0].position);
     }
@@ -353,9 +361,9 @@ class Game {
             this.onResize();
         }
 
-        this.camera3.position.x = this.balls[0].position.x;
+        this.camera3.position.x = this.balls[0].position.x - 10 *this.balls[0].velocity.x;
         this.camera3.position.y = this.balls[0].position.y + 10;
-        this.camera3.position.z = this.balls[0].position.z + 10;
+        this.camera3.position.z = this.balls[0].position.z - 10 *this.balls[0].velocity.z;
         this.camera3.lookAt(this.balls[0].position);
 
         if (this.toggleAxes) {
@@ -372,11 +380,11 @@ class Game {
             this.countUp = 0;
         }
 
-        this.checkCollisions(this.collide.bind(this));
         for(var i = 0; i < this.numberOfBalls; i++) {
             this.scene.getObjectByName("ball" + i).updateBall(delta, speedUp);
         }
-
+        this.checkCollisions(this.collide.bind(this));
+        
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
