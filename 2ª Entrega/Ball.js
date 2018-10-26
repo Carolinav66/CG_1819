@@ -3,7 +3,7 @@ class Ball extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            new THREE.MeshBasicMaterial({ color: 0xaedfff, wireframe: true }),
+            new THREE.MeshBasicMaterial({ color: 0xaedfff, wireframe: false }),
             "ball"+id);
 
         this.radius = radius;

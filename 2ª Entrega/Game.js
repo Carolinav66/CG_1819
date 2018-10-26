@@ -33,9 +33,9 @@ class Game {
         var radius = Math.sqrt(4500) / 20;
         var collision = true;
 
-        var x; //= Math.random() * (60 - 2 * radius) - 30 + radius;
-        var y; //= radius;
-        var z; //= Math.random() * (30 - 2 * radius) - 15 + radius;
+        var x;
+        var y;
+        var z;
 
         for(var i = 0; i < this.numberOfBalls; i++) {
             x = Math.random() * (60 - 2 * radius) - 30 + radius;
@@ -116,20 +116,13 @@ class Game {
             return;
         }
 
-        var x = (2 * this.balls[i].radius - this.balls[i].ballDistance(this.balls[j])) / 2+0.01;
+        var x = (2 * this.balls[i].radius - this.balls[i].ballDistance(this.balls[j])) / 2 + 0.01;
         var bounceDirection = new THREE.Vector3(this.balls[j].position.x - this.balls[i].position.x,
                                                 0,
                                                 this.balls[j].position.z - this.balls[i].position.z)
 
         this.balls[i].updatePosition(bounceDirection, -x);
         this.balls[j].updatePosition(bounceDirection, x);
-
-        /* if(this.balls[i].ballDistance(this.balls[j]) < 2 * this.balls[i].radius) {
-            var x = -(2 * this.balls[i].radius - this.balls[i].ballDistance(this.balls[j])) / 2;
-
-            this.balls[i].updatePosition(this.balls[i].velocity, x);
-            this.balls[j].updatePosition(this.balls[j].velocity, x);
-        } */
 
         var v2 = this.balls[j].velocity;
         var v1 = this.balls[i].velocity;
@@ -143,30 +136,7 @@ class Game {
         this.balls[i].speed = s2;
         this.balls[j].speed = s1;
 
-        /*var c1 = [this.balls[i].position.x, this.balls[i].position.y, this.balls[i].position.z];
-        var c2 = [this.balls[j].position.x, this.balls[j].position.y, this.balls[j].position.z];
-
-        var m1 = 1;
-        var m2 = 1;
-
-        var dist = this.pointDistance(c1, c2);
-        var vDiff = v2.distanceTo(v1);
-
-        var cNorm = Math.sqrt(dist[0]**2, dist[1]**2, dist[2]**2);
-        var interProd = dist[0] * vDiff.x + dist[1] * vDiff.y + dist[2] * vDiff.z;
-
-        var scalar = ( (2 * m2) / (m1 + m2) ) * ( interProd / cNorm**2 );
-        var aux = [dist[0] * scalar, dist[1] * scalar, dist[2] * scalar];
-
-        var new_v1 = new THREE.Vector3( v1.x - aux[0],  v1.y - aux[1], v1.z - aux[2]);*/
-
-
     }
-
-    /*pointDistance(a, b) {
-        'use strict';
-        return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-    }*/
 
     createScene() {
         'use strict';
@@ -175,18 +145,14 @@ class Game {
 
         this.field = new Field(0, 0, 0);
         this.scene.add(this.field);
-        //var ball = new Ball(0,Math.sqrt(4500)/40,0);
-        //this.scene.add(ball);
         this.placeBalls();
-        var axis = new THREE.AxisHelper(5);
-        this.scene.add(axis);
+        //var axis = new THREE.AxisHelper(5);
+        //this.scene.add(axis);
 
     }
 
     createCamera1() {
         'use strict';
-
-        var aspectConstant = 50;
 
         this.cameraNumber = 1;
 
@@ -207,8 +173,6 @@ class Game {
     createCamera2() {
         'use strict';
 
-        var aspectConstant = 50;
-
         this.cameraNumber = 2;
 
         this.camera2 = new THREE.PerspectiveCamera(45,
@@ -225,17 +189,15 @@ class Game {
     createCamera3() {
         'use strict';
 
-        var aspectConstant = 50;
-
         this.cameraNumber = 3;
 
         this.camera3 = new THREE.PerspectiveCamera(45,
                                                   window.innerWidth / window.innerHeight,
                                                   1,
                                                   1000);
-        this.camera3.position.x = this.balls[0].position.x - 10 *this.balls[0].velocity.x;
+        this.camera3.position.x = this.balls[0].position.x - 10 * this.balls[0].velocity.x;
         this.camera3.position.y = this.balls[0].position.y + 10;
-        this.camera3.position.z = this.balls[0].position.z - 10 *this.balls[0].velocity.z;
+        this.camera3.position.z = this.balls[0].position.z - 10 * this.balls[0].velocity.z;
 
         this.camera3.lookAt(this.balls[0].position);
     }
@@ -340,14 +302,14 @@ class Game {
         this.createCamera1(); //50, 50, 50
         this.createCamera2();
         this.createCamera3();
-        this.controls = new THREE.OrbitControls( this.camera2 );
+        //this.controls = new THREE.OrbitControls( this.camera2 );
 
         this.camera = this.camera1;
         this.cameraNumber = 1;
 
         this.onResize();
         this.render();
-        this.controls.update();
+        //this.controls.update();
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("resize", this.onResize.bind(this));
     }
@@ -361,11 +323,7 @@ class Game {
             this.onResize();
         }
 
-        this.camera3.position.x = this.balls[0].position.x - 10 *this.balls[0].velocity.x;
-        this.camera3.position.y = this.balls[0].position.y + 10;
-        this.camera3.position.z = this.balls[0].position.z - 10 *this.balls[0].velocity.z;
-        this.camera3.lookAt(this.balls[0].position);
-
+        
         if (this.toggleAxes) {
             for (var i = 0; i < this.balls.length; i++) {
                 this.balls[i].toggleAxis();
@@ -379,13 +337,18 @@ class Game {
             speedUp = true;
             this.countUp = 0;
         }
-
+        
         for(var i = 0; i < this.numberOfBalls; i++) {
             this.scene.getObjectByName("ball" + i).updateBall(delta, speedUp);
         }
         this.checkCollisions(this.collide.bind(this));
         
-        this.controls.update();
+        this.camera3.position.x = this.balls[0].position.x - 10 * this.balls[0].velocity.x;
+        this.camera3.position.y = this.balls[0].position.y + 10;
+        this.camera3.position.z = this.balls[0].position.z - 10 * this.balls[0].velocity.z;
+        this.camera3.lookAt(this.balls[0].position);
+        
+        // this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
     }
