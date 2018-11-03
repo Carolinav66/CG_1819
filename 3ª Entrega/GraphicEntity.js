@@ -23,6 +23,17 @@ class GraphicEntity extends THREE.Object3D {
         this.position.z += vector.z * delta;
     }
 
+    createTriangle(x,y,z,width, length){
+        var vertices = [new THREE.Vector3(x,y,z),
+                        new THREE.Vector3(x+width,y,z+length),
+                        new THREE.Vector3(x,y,z+length)];
+
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(vertices[0],vertices[1],vertices[2]);
+        geometry.faces.push(new THREE.Face3(0,2,1));
+        return geometry;
+    }
+
     createSquare(x,y,z,width,length){
         var vertices = [new THREE.Vector3(x,y,z),
                         new THREE.Vector3(x+width,y,z),
@@ -30,30 +41,70 @@ class GraphicEntity extends THREE.Object3D {
                         new THREE.Vector3(x,y,z+length)];
 
         var geometry = new THREE.Geometry();
-        geometry.vertices.push(vertices[0],vertices[1],vertices[2],vertices[3]);
-        geometry.faces.push(new THREE.Face3(0,1,2));
-        geometry.faces.push(new THREE.Face3(0,2,3));
+        geometry.vertices.push(vertices[0],vertices[1],vertices[2],vertices[0],vertices[2],vertices[3]);
+        geometry.faces.push(new THREE.Face3(0,2,1));
+        geometry.faces.push(new THREE.Face3(3,5,4));
         return geometry
     }
-    createPlane(x,y,z,width,length,verticalSegments,horizontalSegments){
+    createPlane(x,y,z,width,length,widthSegments,lengthSegments){
         var squares = [];
-        for (var i=0; i<horizontalSegments; i++){
-            for (var j=0; j<verticalSegments; j++){
-                squares.push(this.createSquare(i*length/horizontalSegments,
+        for (var i=0; i<lengthSegments; i++){
+            for (var j=0; j<widthSegments; j++){
+                squares.push(this.createSquare(x + j*width/widthSegments,
                                               y,
-                                              j*width/verticalSegments,
-                                              width/verticalSegments,
-                                              length/horizontalSegments));
-                console.log("Creating Square at ",i*length/horizontalSegments,y,j*width/verticalSegments);
+                                              z + i*length/lengthSegments,
+                                              width/widthSegments,
+                                              length/lengthSegments));
+                console.log("Creating Square at ",i*length/lengthSegments,y,j*width/widthSegments);
             }
         }
         var geometry = new THREE.Geometry();
         for (var i=0; i < squares.length; i++){
-            geometry.vertices.push(squares[i].vertices[0],squares[i].vertices[1],squares[i].vertices[2],squares[i].vertices[3])
-            geometry.faces.push(new THREE.Face3(i*4,i*4+2,i*4+1));
-            geometry.faces.push(new THREE.Face3(i*4,i*4+3,i*4+2));
+            geometry.vertices.push(squares[i].vertices[0],
+                                    squares[i].vertices[1],
+                                    squares[i].vertices[2],
+                                    squares[i].vertices[3],
+                                    squares[i].vertices[4],
+                                    squares[i].vertices[5]);
+            geometry.faces.push(new THREE.Face3(i*6,i*6+2,i*6+1));
+            geometry.faces.push(new THREE.Face3(i*6+3,i*6+5,i*6+4));
         }
         return geometry;
 
+    }
+    createTrianglePlane(x,y,z,width,length,widthSegments,lengthSegments){
+        var parts = []
+        for (var i=0; i<lengthSegments; i++){
+            for (var j=0; j<widthSegments; j++){
+                if(i==j){
+                    parts.push(this.createTriangle( x + j * width / widthSegments,
+                                                    y,
+                                                    z + i * length / lengthSegments,
+                                                    width/widthSegments,
+                                                    length/lengthSegments));
+                }
+                else if(i > j){
+                    parts.push(this.createSquare(x + j * width / widthSegments,
+                                                 y,
+                                                 z + i * length / lengthSegments,
+                                                 width/widthSegments,
+                                                 length/lengthSegments));
+                }
+            }
+        }
+        var geometry = new THREE.Geometry();
+            for (var i=0; i < parts.length; i++){
+                for(var j = 0; j < parts[i].faces.length; j++){
+                    /*console.log("creating triangle with ",parts[i].vertices[0+j*3],
+                                            parts[i].vertices[1+j*3],
+                                            parts[i].vertices[2+j*3]);*/
+                    var verticeIndex = geometry.vertices.length;
+                    geometry.vertices.push(parts[i].vertices[0+j*3],
+                                            parts[i].vertices[1+j*3],
+                                            parts[i].vertices[2+j*3]);
+                    geometry.faces.push(new THREE.Face3(verticeIndex,verticeIndex+2,verticeIndex+1));
+            }
+        }
+        return geometry;
     }
 }
