@@ -24,8 +24,8 @@ class Game {
 
         this.scene = new THREE.Scene();
 
-        this.plane = new Plane(0, 0, 0);
-        this.scene.add(this.plane);
+        this.airplane = new AirPlane(0, 0, 0);
+        this.scene.add(this.airplane);
         var axis = new THREE.AxisHelper(5);
         this.scene.add(axis);
 
@@ -55,7 +55,7 @@ class Game {
 
         this.cameraNumber = 2;
 
-        this.camera2 = new THREE.PerspectiveCamera(45,
+        this.camera2 = new THREE.PerspectiveCamera(10,
                                                   window.innerWidth / window.innerHeight,
                                                   1,
                                                   1000);
