@@ -23,6 +23,31 @@ class GraphicEntity extends THREE.Object3D {
         this.position.z += vector.z * delta;
     }
 
+    createCustomCylinder(x,y,z,radii,radialSegments){
+        var geometry = new THREE.Geometry();
+        for (var i = 0; i<radii.length; i++){
+            for (var angle = 0; angle<2*Math.PI; angle += (2*Math.PI)/radialSegments){
+                geometry.vertices.push(new THREE.Vector3(x + radii[i][1]*Math.cos(angle),
+                                                        y + radii[i][1]*Math.sin(angle),
+                                                        z +radii[i][0]));
+                // geometry.vertices.push(new THREE.Vector3(x + radii[i][1]*angle,
+                //                                         0,
+                //                                         radii[i][0]));
+            }
+        }
+        for (var i = 0; i< radii.length-1; i++){
+            for(var j = 0; j < radialSegments; j++){
+                geometry.faces.push(new THREE.Face3(radialSegments*i+j,
+                                                    radialSegments*i+((j+1)%radialSegments),
+                                                    radialSegments*(i+1)+((j+1)%radialSegments)));
+                geometry.faces.push(new THREE.Face3(radialSegments*i+j,
+                                                    radialSegments*(i+1)+((j+1)%radialSegments),
+                                                    radialSegments*(i+1)+j));
+            }
+        }
+        return geometry;
+    }
+
     createTriangle(x,y,z,width, length){
         var vertices = [new THREE.Vector3(x,y,z),
                         new THREE.Vector3(x+width,y,z+length),
@@ -72,6 +97,7 @@ class GraphicEntity extends THREE.Object3D {
         return geometry;
 
     }
+
     createTrianglePlane(x,y,z,width,length,widthSegments,lengthSegments){
         var parts = []
         for (var i=0; i<lengthSegments; i++){
