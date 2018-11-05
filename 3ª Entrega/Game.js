@@ -55,7 +55,7 @@ class Game {
 
         this.cameraNumber = 2;
 
-        this.camera2 = new THREE.PerspectiveCamera(10,
+        this.camera2 = new THREE.PerspectiveCamera(20,
                                                   window.innerWidth / window.innerHeight,
                                                   1,
                                                   1000);
@@ -176,7 +176,8 @@ class Game {
             this.changeCamara = false;
             this.onResize();
         }
-
+        var delta = this.clock.getDelta();
+        this.airplane.rotateRotor(delta)
 
         this.controls.update();
         this.render();
