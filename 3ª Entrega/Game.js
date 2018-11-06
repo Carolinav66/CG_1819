@@ -17,6 +17,10 @@ class Game {
         this.changeCamara = false;
         this.cameraNumber = 1;
 
+        this.airplaneRoll = 0;
+        this.airplanePitch = 0;
+
+
     }
 
     createScene() {
@@ -86,8 +90,62 @@ class Game {
         'use strict';
 
         switch (e.keyCode) {
-            case 69:  //E
-            case 101: //e
+            case 65:  //A
+            case 97: //a
+                this.airplaneRoll = -2;
+                break;
+
+            case 68:  //D
+            case 100: //d
+                this.airplaneRoll = 2;
+                break;
+
+            case 87:  //W
+            case 119: //w
+                this.airplanePitch = 2;
+                break;
+
+            case 83:  //S
+            case 115: //s
+                this.airplanePitch = -2;
+                break;
+
+            case 49: //1
+                this.cameraNumber = 1;
+                this.changeCamara = true;
+                break;
+
+            case 50: //2
+                this.cameraNumber = 2;
+                this.changeCamara = true;
+                break;
+
+            default:
+                break;
+        }
+    }
+    onKeyUp(e) {
+        'use strict';
+
+        switch (e.keyCode) {
+            case 65:  //A
+            case 97: //a
+                this.airplaneRoll = 0;
+                break;
+
+            case 68:  //D
+            case 100: //d
+                this.airplaneRoll = 0;
+                break;
+
+            case 87:  //W
+            case 119: //w
+                this.airplanePitch = 0;
+                break;
+
+            case 83:  //S
+            case 115: //s
+                this.airplanePitch = 0;
                 break;
 
             case 49: //1
@@ -165,6 +223,7 @@ class Game {
         this.render();
         this.controls.update();
         window.addEventListener("keydown", this.onKeyDown.bind(this));
+        window.addEventListener("keyup", this.onKeyUp.bind(this));
         window.addEventListener("resize", this.onResize.bind(this));
     }
 
@@ -177,7 +236,9 @@ class Game {
             this.onResize();
         }
         var delta = this.clock.getDelta();
-        this.airplane.rotateRotor(delta)
+        this.airplane.rotateRotor(delta);
+        this.airplane.roll(delta, this.airplaneRoll);
+        this.airplane.pitch(delta, this.airplanePitch);
 
         this.controls.update();
         this.render();

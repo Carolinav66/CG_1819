@@ -3,13 +3,14 @@ class AirPlane extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            [new THREE.MeshBasicMaterial({ color: 0xc56836 /*0xff09e5*/, wireframe: true }),
-            new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: false, side: THREE.DoubleSide })],
+            [new THREE.MeshBasicMaterial({ color: 0xc56836 /*0xff09e5*/, wireframe: false }),
+            new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: false, side: THREE.DoubleSide }),
+            new THREE.MeshBasicMaterial({ color: 0x3697dd, wireframe: false, opacity: 0.5, transparent: true , side: THREE.DoubleSide })],
             "field");
 
         this.createChassis(0,0,-15);
-        this.createWing(2.3,0,-3,25,8,15,"left");
-        this.createWing(-2.3,0,-3,25,8,15,"right");
+        this.leftWing = this.createWing(2.3,0,-3,25,8,15,"left");
+        this.rightWing = this.createWing(-2.3,0,-3,25,8,15,"right");
         this.rotor = new Rotor(0,0,5.5,
             [new THREE.MeshBasicMaterial({ color: 0xd58846 /*0xff09e5*/, wireframe: false, side: THREE.DoubleSide })]);
         this.add(this.rotor);
@@ -17,6 +18,9 @@ class AirPlane extends GraphicEntity {
         this.createWing(-1,0,-18,7,5,9,"right");
         var topStablizer = this.createWing(1,0,-18,9,5,8,"left");
         topStablizer.rotation.z+=Math.PI/2;
+        this.createWindShield(0,1,-2,3,2*Math.PI,Math.PI,15,15)
+        this.add(new THREE.AxisHelper(15));
+        this.eulerOrder = 'ZYX';
 
     }
 
@@ -36,6 +40,9 @@ class AirPlane extends GraphicEntity {
         geometry.vertices[229].y-=0.2;
         geometry.vertices[228].y-=0.4;
         geometry.vertices[227].y-=0.2;
+        for (var i = 0; i < geometry.vertices.length; i++){
+            geometry.vertices[i].y*=0.8;
+        }
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
         var mesh = new THREE.Mesh(geometry, this.materials[0]);
@@ -71,6 +78,8 @@ class AirPlane extends GraphicEntity {
                                                             Math.sin(angle)*width*i/5 + z));
             }
         }
+
+        //bottom inner wing face
         for (var j = 0; j < radialSegments; j++){
             if (side == "left"){
                 geometry.faces.push(new THREE.Face3(0,j+1,j+2))
@@ -78,6 +87,7 @@ class AirPlane extends GraphicEntity {
                 geometry.faces.push(new THREE.Face3(0,j+2,j+1))
             }
         }
+        //bottom outer wing face
         for(var i = 1; i<4; i++){
             for(var j=0; j<radialSegments; j++){
                 if (side == "left"){
@@ -98,6 +108,7 @@ class AirPlane extends GraphicEntity {
 
             }
         }
+        // top inner wing face
         for (var j = 0; j < radialSegments; j++){
             if (side == "right"){
                 geometry.faces.push(new THREE.Face3(topIndex,topIndex + j + 1,topIndex + j + 2))
@@ -105,6 +116,7 @@ class AirPlane extends GraphicEntity {
                 geometry.faces.push(new THREE.Face3(topIndex,topIndex + j + 2,topIndex + j + 1))
             }
         }
+        // top outer wing face
         for(var i = 1; i<4; i++){
             for(var j=0; j<radialSegments; j++){
                 if (side == "left"){
@@ -125,12 +137,13 @@ class AirPlane extends GraphicEntity {
 
             }
         }
+        //length wing face
         for(var i = 0; i<4; i++){
-            if(side == "left"){
+            if(side == "right"){
                 if(i == 0){
                     geometry.faces.push(new THREE.Face3(0,
-                                                        topIndex,
-                                                        1));
+                                                        topIndex +1,
+                                                        topIndex));
                     geometry.faces.push(new THREE.Face3(0,
                                                         i*(radialSegments+1) + 1,
                                                         topIndex + 1));
@@ -142,12 +155,11 @@ class AirPlane extends GraphicEntity {
                                                         i*(radialSegments+1) + 1,
                                                         topIndex + i*(radialSegments+1) + 1));
                 }
-
             } else {
                 if( i == 0){
                     geometry.faces.push(new THREE.Face3(0,
-                                                        1,
-                                                        topIndex));
+                                                        topIndex,
+                                                        topIndex+1));
                     geometry.faces.push(new THREE.Face3(0,
                                                         topIndex + 1,
                                                         i*(radialSegments+1) + 1));
@@ -201,18 +213,18 @@ class AirPlane extends GraphicEntity {
         for (var i = 0; i < radialSegments; i++){
             if (side == "left"){
                 geometry.faces.push(new THREE.Face3(3*(radialSegments+1)+1+i,
-                                                    topIndex + 3*(radialSegments+1)+2+i,
-                                                    topIndex + 3*(radialSegments+1)+1+i));
-                geometry.faces.push(new THREE.Face3(3*(radialSegments+1)+1+i,
-                                                    3*(radialSegments+1)+2+i,
-                                                    topIndex + 3*(radialSegments+1)+2+i));
-            } else {
-                geometry.faces.push(new THREE.Face3(3*(radialSegments+1)+1+i,
                                                     topIndex + 3*(radialSegments+1)+1+i,
                                                     topIndex + 3*(radialSegments+1)+2+i));
                 geometry.faces.push(new THREE.Face3(3*(radialSegments+1)+1+i,
                                                     topIndex + 3*(radialSegments+1)+2+i,
                                                     3*(radialSegments+1)+2+i));
+            } else {
+                geometry.faces.push(new THREE.Face3(3*(radialSegments+1)+1+i,
+                                                    topIndex + 3*(radialSegments+1)+2+i,
+                                                    topIndex + 3*(radialSegments+1)+1+i));
+                geometry.faces.push(new THREE.Face3(3*(radialSegments+1)+1+i,
+                                                    3*(radialSegments+1)+2+i,
+                                                    topIndex + 3*(radialSegments+1)+2+i));
             }
         }
 
@@ -228,8 +240,55 @@ class AirPlane extends GraphicEntity {
         return mesh;
     }
 
+    createWindShield(x,y,z,radius, sideAngle, heightAngle, sideSegments, heightSegments){
+        var geometry = new THREE.Geometry();
+        for (var side = 0; side <= sideAngle; side+=sideAngle/sideSegments){
+            for (var height = 0; height <= heightAngle; height+=heightAngle/heightSegments){
+                geometry.vertices.push(new THREE.Vector3(radius*Math.cos(side)*Math.cos(height)*0.7,
+                                                        radius*Math.sin(height),
+                                                        radius*Math.sin(side)*Math.cos(height)))
+            }
+        }
+        for(var i=0; i < sideSegments; i++){
+            for(var j=0; j < heightSegments; j++){
+                geometry.faces.push(new THREE.Face3(i*(sideSegments + 1)+j,
+                                                    (i)*(sideSegments + 1)+j+1,
+                                                    (i+1)*(sideSegments + 1)+ j +1));
+                geometry.faces.push(new THREE.Face3(i*(sideSegments + 1)+j,
+                                                    (i+1)*(sideSegments + 1)+j+1,
+                                                    (i+1)*(sideSegments + 1) + j));
+            }
+        }
+        geometry.computeFaceNormals();
+        geometry.computeVertexNormals();
+        var mesh = new THREE.Mesh(geometry, this.materials[2]);
+        mesh.position.x+=x;
+        mesh.position.y+=y;
+        mesh.position.z+=z;
+        this.add(mesh);
+        // for (var i = 0; i< geometry.vertices.length; i++){
+        //     var ballmesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 15, 15), this.materials[1]);
+        //     ballmesh.position.set(geometry.vertices[i].x,geometry.vertices[i].y,geometry.vertices[i].z);
+        //     this.add(ballmesh);
+        // }
+    }
+
     rotateRotor(delta){
         this.rotor.rotateRotor(delta);
+    }
+
+    roll(delta, speed){
+        this.rotateZ(delta*speed);
+        this.leftWing.rotation.x=0;
+        this.rightWing.rotation.x=0;
+        this.leftWing.rotation.x -= speed*0.15;
+        this.rightWing.rotation.x += speed*0.15;
+    }
+
+    pitch(delta,speed){
+        this.rotation.x+=delta*speed;
+        this.leftWing.rotation.x += speed*0.15;
+        this.rightWing.rotation.x += speed*0.15;
     }
 
 }
