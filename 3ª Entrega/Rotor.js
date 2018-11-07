@@ -7,6 +7,9 @@ class Rotor extends GraphicEntity{
 
         this.createRotor();
 
+        console.log(this.paddle1Mesh.material);
+
+
     }
     createRotor(){
         var radii =[[0,1.2],[0.1,1.2],[0.2,1.15],[0.3,1.05],[0.4,0.9],[0.5,0.75],[0.6,0.5],[0.7,0.2],[0.75,0]];
@@ -37,17 +40,17 @@ class Rotor extends GraphicEntity{
             }
         }
 
-        var paddle1Mesh = new THREE.Mesh(paddleGeometry, this.materials[0]);
-        var paddle2Mesh = new THREE.Mesh(paddleGeometry, this.materials[0]);
-        paddle1Mesh.rotation.y+=0.3;
-        paddle2Mesh.rotation.y-=0.3;
-        paddle2Mesh.rotation.z+=Math.PI;
+        this.paddle1Mesh = new THREE.Mesh(paddleGeometry, this.materials[0]);
+        this.paddle2Mesh = new THREE.Mesh(paddleGeometry, this.materials[0]);
+        this.paddle1Mesh.rotation.y+=0.3;
+        this.paddle2Mesh.rotation.y-=0.3;
+        this.paddle2Mesh.rotation.z+=Math.PI;
 
-        this.add(paddle1Mesh);
-        this.add(paddle2Mesh);
+        this.add(this.paddle1Mesh);
+        this.add(this.paddle2Mesh);
     }
 
     rotateRotor(delta){
-        this.rotation.z+=50*delta;
+        this.rotation.z+=0*delta;
     }
 }

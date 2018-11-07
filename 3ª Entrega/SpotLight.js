@@ -7,7 +7,7 @@ class SpotLight extends GraphicEntity {
              new THREE.MeshBasicMaterial({color: 0x777777})],
             "spotlight");
 
-        this.on = false;
+        this.on = true;
 
         this.addSpotLightBase(0, 0, 0);
         this.addBulb(0, 0, 0);

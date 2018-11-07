@@ -3,26 +3,44 @@ class AirPlane extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            [new THREE.MeshLambertMaterial({color: 0x263b47 /*0xff09e5*/, wireframe: false, emissive: 0x000000}),
-            new THREE.MeshLambertMaterial({ color: 0xff09e5, wireframe: false, side: THREE.DoubleSide }),
-            new THREE.MeshLambertMaterial({ color: 0x99aaff, wireframe: false, opacity: 0.5, transparent: true , side: THREE.DoubleSide }),
-            new THREE.MeshLambertMaterial({ color: 0x404040, wireframe: false})],
+            [new THREE.MeshLambertMaterial({ color: 0x263b47, wireframe: false}),
+             new THREE.MeshLambertMaterial({ color: 0x99aaff, wireframe: false, opacity: 0.5, transparent: true , side: THREE.DoubleSide }),
+             new THREE.MeshLambertMaterial({ color: 0x404040, wireframe: false}),
+             new THREE.MeshLambertMaterial({ color: 0x390022, wireframe: false, side:THREE.DoubleSide}),
+        
+             new THREE.MeshBasicMaterial({ color: 0x263b47, wireframe: false}),
+             new THREE.MeshBasicMaterial({ color: 0x99aaff, wireframe: false, opacity: 0.5, transparent: true}),
+             new THREE.MeshBasicMaterial({ color: 0x404040, wireframe: false}),
+             new THREE.MeshBasicMaterial({ color: 0x390022, wireframe: false, side: THREE.DoubleSide })
+        ],
             "airplane");
 
         this.createChassis(0,0,-15);
+
         this.leftWing = this.createWing(2.3,0,-3,25,8,15,"left");
         this.rightWing = this.createWing(-2.3,0,-3,25,8,15,"right");
-        this.rotor = new Rotor(0,0,5.5,
-            [new THREE.MeshBasicMaterial({ color: 0x390022 /*0xff09e5*/, wireframe: false, side: THREE.DoubleSide })]);
-        this.add(this.rotor);
-        this.createWing(1,0,-18,7,5,9,"left");
-        this.createWing(-1,0,-18,7,5,9,"right");
-        var topStablizer = this.createWing(1,0,-18,9,5,8,"left");
-        topStablizer.rotation.z+=Math.PI/2;
-        this.createWindShield(0,1,-2,3,2*Math.PI,Math.PI,15,15)
+        this.rearLeftWing = this.createWing(1,0,-18,7,5,9,"left");
+        this.rearRightWing = this.createWing(-1,0,-18,7,5,9,"right");
+        this.topStablizer = this.createWing(1,0,-18,9,5,8,"left");
+        this.topStablizer.rotation.z+=Math.PI/2;
+
+        this.windShield = this.createWindShield(0,1,-2,3,2*Math.PI,Math.PI,15,15)
+
+        this.createRotor(0,0,5);
+
         this.add(new THREE.AxisHelper(15));
+
         this.eulerOrder = 'ZYX';
 
+
+        this.lambertActivated = true;
+
+    }
+
+    toggleMaterials() {
+        if (this.lambertActivated) {
+
+        }
     }
 
     createChassis(x,y,z){
@@ -46,21 +64,13 @@ class AirPlane extends GraphicEntity {
         }
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
-        /* this.materials[0].specular = new THREE.Color(0xffffff);
-        this.materials[0].shininess = 0;
-        this.materials[0].shading = THREE.FlatShading;
-        this.materials[0].needsUpdate = true; */
-
-
+     
         geometry.normalsNeedUpdate = true;
         
 
-        var mesh = new THREE.Mesh(geometry, this.materials[0]);
-        this.add(mesh);
-        var ballmesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 15, 15), this.materials[1]);
-        //ballmesh.position.set(geometry.vertices[229].x,geometry.vertices[229].y,geometry.vertices[229].z);
-        // ballmesh.position.set(15,0,5);
-        // this.add(ballmesh);
+        this.chassisMesh = new THREE.Mesh(geometry, this.materials[0]);
+        this.chassisMesh.name = "chassis";
+        this.add(this.chassisMesh);
     }
 
     createWing(x,y,z,length,width,radialSegments,side){
@@ -240,13 +250,8 @@ class AirPlane extends GraphicEntity {
 
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
-        var mesh = new THREE.Mesh(geometry, this.materials[3]);
+        var mesh = new THREE.Mesh(geometry, this.materials[2]);
         this.add(mesh);
-        // for (var i = 0; i< geometry.vertices.length; i++){
-            // var ballmesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 15, 15), this.materials[1]);
-            // ballmesh.position.set(geometry.vertices[0].x,geometry.vertices[0].y,geometry.vertices[0].z);
-            // this.add(ballmesh);
-        // }
         return mesh;
     }
 
@@ -271,20 +276,67 @@ class AirPlane extends GraphicEntity {
         }
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
-        var mesh = new THREE.Mesh(geometry, this.materials[2]);
+        var mesh = new THREE.Mesh(geometry, this.materials[1]);
         mesh.position.x+=x;
         mesh.position.y+=y;
         mesh.position.z+=z;
+        mesh.name="windshield";
         this.add(mesh);
-        // for (var i = 0; i< geometry.vertices.length; i++){
-        //     var ballmesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 15, 15), this.materials[1]);
-        //     ballmesh.position.set(geometry.vertices[i].x,geometry.vertices[i].y,geometry.vertices[i].z);
-        //     this.add(ballmesh);
-        // }
+        return mesh;
     }
+    
+    createRotor(x,y,z){
 
+        var radii =[[0,1.2],[0.1,1.2],[0.2,1.15],[0.3,1.05],[0.4,0.9],[0.5,0.75],[0.6,0.5],[0.7,0.2],[0.75,0]];
+        var baseGeometry = this.createCustomCylinder(x,y,z, radii,16);
+        baseGeometry.computeFaceNormals();
+        baseGeometry.computeVertexNormals();
+        var baseMesh = new THREE.Mesh(baseGeometry, this.materials[3]);
+        baseMesh.name = "base";
+        this.add(baseMesh);
+
+        var paddleGeometry=new THREE.Geometry();
+        //rotor.add(baseMesh);
+
+        paddleGeometry.vertices.push(new THREE.Vector3(0,0,0));
+        for(var i=1; i<5; i++){
+            for(var angle=0; angle<=Math.PI; angle+=Math.PI/(20)){
+                paddleGeometry.vertices.push(new THREE.Vector3(Math.cos(angle)*(0.5+Math.sin(angle)*2*i/5)*i/5,
+                                                            Math.sin(angle)*7*i/5,
+                                                            ));
+            }
+        }
+        var radialSegments = 20;
+        for (var j = 0; j < radialSegments; j++){
+            paddleGeometry.faces.push(new THREE.Face3(0,j+1,j+2))
+        }
+        for(var i = 1; i<4; i++){
+            for(var j=0; j<radialSegments; j++){
+                paddleGeometry.faces.push(new THREE.Face3((i-1)*(radialSegments+1)+j+1,
+                                                (i)*(radialSegments+1)+j+1,
+                                                (i)*(radialSegments+1)+j+2));
+                paddleGeometry.faces.push(new THREE.Face3((i-1)*(radialSegments+1)+j+1,
+                                                (i)*(radialSegments+1)+j+2,
+                                                (i-1)*(radialSegments+1)+j+2));
+            }
+        }
+        paddleGeometry.computeFaceNormals();
+        paddleGeometry.computeVertexNormals();
+        this.paddle1Mesh = new THREE.Mesh(paddleGeometry, this.materials[3]);
+        this.paddle2Mesh = new THREE.Mesh(paddleGeometry, this.materials[3]);
+        this.paddle2Mesh.rotation.z+=Math.PI;
+        this.paddle1Mesh.position.set(x,y,z+0.5);
+        this.paddle2Mesh.position.set(x,y,z+0.5);
+        this.paddle1Mesh.name="paddle";
+        this.paddle2Mesh.name="paddle";
+
+        this.add(this.paddle1Mesh);
+        this.add(this.paddle2Mesh);
+        console.log(this.paddle1Mesh);
+    }
     rotateRotor(delta){
-        this.rotor.rotateRotor(delta);
+        this.paddle1Mesh.rotation.z+=50*delta;
+        this.paddle2Mesh.rotation.z+=50*delta;
     }
 
     roll(delta, speed){

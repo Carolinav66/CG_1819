@@ -12,9 +12,11 @@ class Game {
 
         this.spotlights = new Array(4);
         this.toggleLights = [false, false, false, false];
-        //this.toggleLights = [true, true, true, true];
+        this.materials = new Array(6);
+        this.toggleMaterials = false;
 
-    }
+    } 
+
 
     createScene() {
         'use strict';
@@ -100,6 +102,14 @@ class Game {
                 this.sun.intensity = this.sun.intensity == 1 ? 0 : 1;
             default:
                 break;
+
+            case 71: //g
+                console.log(this.airplane);
+                break;
+            
+            case 76: //l
+                this.toggleMaterials = true;
+                break;
         }
     }
     onKeyUp(e) {
@@ -169,6 +179,11 @@ class Game {
                 this.spotlights[i].toggleLight();
                 this.toggleLights[i] = false;
             }
+        }
+
+        if(this.toggleMaterials) {
+            this.airplane.toggleMaterials();
+            this.toggleMaterials = false;
         }
 
         var delta = this.clock.getDelta();
