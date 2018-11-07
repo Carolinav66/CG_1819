@@ -5,22 +5,13 @@ class Game {
         this.clock = new THREE.Clock();
         this.clock.start();
 
-        this.orthoCameraAspectRatio = 16 / 9;
-        this.orthoCameraWidth = 90; //65;
-        this.orthoCameraHeight = this.orthoCameraWidth / this.orthoCameraAspectRatio;
-
-        this.aspect = [window.innerWidth, window.innerHeight];
-        this.ratio = window.innerWidth / window.innerHeight;
-
-        this.camaraPos1 = [0, 75, 0];
-        this.camaraPos2 = [50, 50, 50];
-        this.changeCamara = false;
-        this.cameraNumber = 1;
+        this.camaraPos = [50, 50, 50];
 
         this.airplaneRoll = 0;
         this.airplanePitch = 0;
 
-
+        this.spotlights = new Array(4);
+        this.toggleLights = [false, false, false, false];
     }
 
     createScene() {
@@ -30,95 +21,76 @@ class Game {
 
         this.airplane = new AirPlane(0, 0, 0);
         this.scene.add(this.airplane);
+
+        this.spotlights[0] = new SpotLight(10, 12, 10);
+        this.spotlights[0].rotation.x = Math.PI / 4;
+        this.spotlights[0].rotation.z = -Math.PI / 4;
+
+        this.spotlights[1] = new SpotLight(-10, 12, 10);
+        this.spotlights[1].rotation.x = Math.PI / 4;
+        this.spotlights[1].rotation.z = Math.PI / 4;
+
+        this.spotlights[2] = new SpotLight(10, 12, -10);
+        this.spotlights[2].rotation.x = -Math.PI / 4;
+        this.spotlights[2].rotation.z = -Math.PI / 4;
+
+        this.spotlights[3] = new SpotLight(-10, 12, -10);
+        this.spotlights[3].rotation.x = -Math.PI / 4;
+        this.spotlights[3].rotation.z = Math.PI / 4;
+
+        for (var i = 0; i < 4; i++) {
+            this.scene.add(this.spotlights[i]);
+        }
+
         var axis = new THREE.AxisHelper(5);
         this.scene.add(axis);
 
     }
 
-    createCamera1() {
+    createCamera() {
         'use strict';
 
-        this.cameraNumber = 1;
-
-        this.camera1 = new THREE.OrthographicCamera(-this.orthoCameraWidth / 2,
-                                                    this.orthoCameraWidth / 2,
-                                                    this.orthoCameraHeight / 2,
-                                                    -this.orthoCameraHeight / 2,
-                                                    1,
-                                                    1000);
-        this.camera1.position.x = this.camaraPos1[0];
-        this.camera1.position.y = this.camaraPos1[1];
-        this.camera1.position.z = this.camaraPos1[2];
-
-        this.camera1.lookAt(this.scene.position);
-
-    }
-
-    createCamera2() {
-        'use strict';
-
-        this.cameraNumber = 2;
-
-        this.camera2 = new THREE.PerspectiveCamera(20,
+        this.camera = new THREE.PerspectiveCamera(20,
                                                   window.innerWidth / window.innerHeight,
                                                   1,
                                                   1000);
-        this.camera2.position.x = this.camaraPos2[0];
-        this.camera2.position.y = this.camaraPos2[1];
-        this.camera2.position.z = this.camaraPos2[2];
+        this.camera.position.x = this.camaraPos[0];
+        this.camera.position.y = this.camaraPos[1];
+        this.camera.position.z = this.camaraPos[2];
 
-        this.camera2.lookAt(this.scene.position);
-    }
-
-
-
-    changeCamera() {
-        'use strict';
-
-        if(this.cameraNumber == 1){
-          this.camera = this.camera1;
-        }
-
-        if(this.cameraNumber == 2){
-          this.camera = this.camera2;
-        }
-
-        this.changeCamara = false;
+        this.camera.lookAt(this.scene.position);
     }
 
     onKeyDown(e) {
         'use strict';
 
         switch (e.keyCode) {
-            case 65:  //A
-            case 97: //a
+            case 37:
                 this.airplaneRoll = -2;
                 break;
-
-            case 68:  //D
-            case 100: //d
+            case 39:
                 this.airplaneRoll = 2;
                 break;
-
-            case 87:  //W
-            case 119: //w
+            case 38:
                 this.airplanePitch = 2;
                 break;
-
-            case 83:  //S
-            case 115: //s
+            case 40:
                 this.airplanePitch = -2;
                 break;
 
             case 49: //1
-                this.cameraNumber = 1;
-                this.changeCamara = true;
+                this.toggleLights[0] = true;
                 break;
-
             case 50: //2
-                this.cameraNumber = 2;
-                this.changeCamara = true;
+                this.toggleLights[1] = true;
                 break;
+            case 51: //3
+                this.toggleLights[2] = true;
+                break;
+            case 52: //4
+                this.toggleLights[3] = true;
+                break;
+            
 
             default:
                 break;
@@ -128,71 +100,31 @@ class Game {
         'use strict';
 
         switch (e.keyCode) {
-            case 65:  //A
-            case 97: //a
+            case 37:
                 this.airplaneRoll = 0;
                 break;
-
-            case 68:  //D
-            case 100: //d
+            case 39:
                 this.airplaneRoll = 0;
                 break;
-
-            case 87:  //W
-            case 119: //w
+            case 38:
                 this.airplanePitch = 0;
                 break;
-
-            case 83:  //S
-            case 115: //s
+            case 40:
                 this.airplanePitch = 0;
                 break;
-
-            case 49: //1
-                this.cameraNumber = 1;
-                this.changeCamara = true;
-                break;
-
-            case 50: //2
-                this.cameraNumber = 2;
-                this.changeCamara = true;
-                break;
-
             default:
                 break;
         }
     }
 
-
     onResize() {
         'use strict';
 
-        if(this.cameraNumber == 1){
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            var windowRatio = window.innerWidth / window.innerHeight;
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-            if(windowRatio > this.orthoCameraAspectRatio) {
-                this.camera.left = -this.orthoCameraHeight * windowRatio / 2;
-                this.camera.right = this.orthoCameraHeight * windowRatio / 2;
-                this.camera.top = this.orthoCameraHeight / 2;
-                this.camera.bottom = -this.orthoCameraHeight / 2;
-            } else {
-                this.camera.left = -this.orthoCameraWidth / 2;
-                this.camera.right = this.orthoCameraWidth / 2;
-                this.camera.top = (this.orthoCameraWidth / windowRatio) / 2;
-                this.camera.bottom = -(this.orthoCameraWidth / windowRatio) / 2;
-            }
+        if (window.innerHeight > 0 && window.innerWidth > 0) {
+            this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
-        }
-
-        if(this.cameraNumber == 2 || this.cameraNumber == 3) {
-
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-            if (window.innerHeight > 0 && window.innerWidth > 0) {
-                this.camera.aspect = window.innerWidth / window.innerHeight;
-                this.camera.updateProjectionMatrix();
-            }
         }
     }
 
@@ -212,12 +144,8 @@ class Game {
         document.body.appendChild(this.renderer.domElement);
 
         this.createScene();
-        this.createCamera1(); //50, 50, 50
-        this.createCamera2();
-        this.controls = new THREE.OrbitControls( this.camera2 );
-
-        this.camera = this.camera2;
-        this.cameraNumber = 2;
+        this.createCamera();
+        this.controls = new THREE.OrbitControls(this.camera);
 
         this.onResize();
         this.render();
@@ -230,11 +158,13 @@ class Game {
     animate() {
         'use strict';
 
-        if (this.changeCamara) {
-            this.changeCamera();
-            this.changeCamara = false;
-            this.onResize();
+        for (var i = 0; i < this.toggleLights.length; i++) {
+            if (this.toggleLights[i]) {
+                this.spotlights[i].toggleLight();
+                this.toggleLights[i] = false;
+            }
         }
+
         var delta = this.clock.getDelta();
         this.airplane.rotateRotor(delta);
         this.airplane.roll(delta, this.airplaneRoll);

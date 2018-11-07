@@ -3,16 +3,17 @@ class AirPlane extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            [new THREE.MeshBasicMaterial({ color: 0xc56836 /*0xff09e5*/, wireframe: false }),
+            [new THREE.MeshLambertMaterial({color: 0x263b47 /*0xff09e5*/, wireframe: false, emissive: 0x000000}),
             new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: false, side: THREE.DoubleSide }),
-            new THREE.MeshBasicMaterial({ color: 0x3697dd, wireframe: false, opacity: 0.5, transparent: true , side: THREE.DoubleSide })],
-            "field");
+            new THREE.MeshBasicMaterial({ color: 0x99aaff, wireframe: false, opacity: 0.5, transparent: true , side: THREE.DoubleSide }),
+            new THREE.MeshBasicMaterial({ color: 0x404040, wireframe: false})],
+            "airplane");
 
         this.createChassis(0,0,-15);
         this.leftWing = this.createWing(2.3,0,-3,25,8,15,"left");
         this.rightWing = this.createWing(-2.3,0,-3,25,8,15,"right");
         this.rotor = new Rotor(0,0,5.5,
-            [new THREE.MeshBasicMaterial({ color: 0xd58846 /*0xff09e5*/, wireframe: false, side: THREE.DoubleSide })]);
+            [new THREE.MeshBasicMaterial({ color: 0x390022 /*0xff09e5*/, wireframe: false, side: THREE.DoubleSide })]);
         this.add(this.rotor);
         this.createWing(1,0,-18,7,5,9,"left");
         this.createWing(-1,0,-18,7,5,9,"right");
@@ -45,6 +46,15 @@ class AirPlane extends GraphicEntity {
         }
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
+        /* this.materials[0].specular = new THREE.Color(0xffffff);
+        this.materials[0].shininess = 0;
+        this.materials[0].shading = THREE.FlatShading;
+        this.materials[0].needsUpdate = true; */
+
+
+        geometry.normalsNeedUpdate = true;
+        
+
         var mesh = new THREE.Mesh(geometry, this.materials[0]);
         this.add(mesh);
         var ballmesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 15, 15), this.materials[1]);
@@ -230,7 +240,7 @@ class AirPlane extends GraphicEntity {
 
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
-        var mesh = new THREE.Mesh(geometry, this.materials[0]);
+        var mesh = new THREE.Mesh(geometry, this.materials[3]);
         this.add(mesh);
         // for (var i = 0; i< geometry.vertices.length; i++){
             // var ballmesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 15, 15), this.materials[1]);
@@ -279,10 +289,8 @@ class AirPlane extends GraphicEntity {
 
     roll(delta, speed){
         this.rotateZ(delta*speed);
-        this.leftWing.rotation.x=0;
-        this.rightWing.rotation.x=0;
-        this.leftWing.rotation.x -= speed*0.15;
-        this.rightWing.rotation.x += speed*0.15;
+        this.leftWing.rotation.x = -speed*0.15;
+        this.rightWing.rotation.x = speed*0.15;
     }
 
     pitch(delta,speed){
