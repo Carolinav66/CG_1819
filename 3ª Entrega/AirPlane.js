@@ -12,34 +12,50 @@ class AirPlane extends GraphicEntity {
              new THREE.MeshBasicMaterial({ color: 0x99aaff, wireframe: false, opacity: 0.5, transparent: true}),
              new THREE.MeshBasicMaterial({ color: 0x404040, wireframe: false}),
              new THREE.MeshBasicMaterial({ color: 0x390022, wireframe: false, side: THREE.DoubleSide })
-        ],
+            ],
             "airplane");
 
-        this.createChassis(0,0,-15);
+        this.chassisMesh = this.createChassis(0,0,-15);
 
-        this.leftWing = this.createWing(2.3,0,-3,25,8,15,"left");
-        this.rightWing = this.createWing(-2.3,0,-3,25,8,15,"right");
-        this.rearLeftWing = this.createWing(1,0,-18,7,5,9,"left");
-        this.rearRightWing = this.createWing(-1,0,-18,7,5,9,"right");
-        this.topStablizer = this.createWing(1,0,-18,9,5,8,"left");
+        this.leftWing      = this.createWing( 2.3, 0, -3, 25, 8, 15, "left");
+        this.rightWing     = this.createWing(-2.3, 0, -3, 25, 8, 15, "right");
+        this.rearLeftWing  = this.createWing( 1,   0, -18, 7, 5,  9, "left");
+        this.rearRightWing = this.createWing(-1,   0, -18, 7, 5,  9, "right");
+        this.topStablizer  = this.createWing( 1,   0, -18, 9, 5,  8, "top");
         this.topStablizer.rotation.z+=Math.PI/2;
 
-        this.windShield = this.createWindShield(0,1,-2,3,2*Math.PI,Math.PI,15,15)
+        this.windShield = this.createWindShield(0, 1, -2, 3, 2*Math.PI, Math.PI, 15, 15);
 
-        this.createRotor(0,0,5);
+        this.createRotor(0, 0, 5);
 
         this.add(new THREE.AxisHelper(15));
 
         this.eulerOrder = 'ZYX';
 
-
         this.lambertActivated = true;
 
+        console.log(this.children);
     }
 
     toggleMaterials() {
         if (this.lambertActivated) {
-
+            this.lambertActivated = false;
+            this.chassisMesh.material  = this.materials[4];
+            this.leftWing.material     = this.materials[6];
+            this.rightWing.material    = this.materials[6];
+            this.rearLeftWing.material = this.materials[6];
+            this.rearRightWing.material= this.materials[6];
+            this.topStablizer.material = this.materials[6];
+            this.windShield.material   = this.materials[5];
+        } else {
+            this.lambertActivated = true;
+            this.chassisMesh.material  = this.materials[0];
+            this.leftWing.material     = this.materials[2];
+            this.rightWing.material    = this.materials[2];
+            this.rearLeftWing.material = this.materials[2];
+            this.rearRightWing.material= this.materials[2];
+            this.topStablizer.material = this.materials[2];
+            this.windShield.material   = this.materials[1];
         }
     }
 
@@ -68,9 +84,10 @@ class AirPlane extends GraphicEntity {
         geometry.normalsNeedUpdate = true;
         
 
-        this.chassisMesh = new THREE.Mesh(geometry, this.materials[0]);
-        this.chassisMesh.name = "chassis";
-        this.add(this.chassisMesh);
+        var chassisMesh = new THREE.Mesh(geometry, this.materials[0]);
+        chassisMesh.name = "chassis";
+        this.add(chassisMesh);
+        return chassisMesh;
     }
 
     createWing(x,y,z,length,width,radialSegments,side){
