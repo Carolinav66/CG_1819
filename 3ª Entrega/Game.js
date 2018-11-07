@@ -12,12 +12,17 @@ class Game {
 
         this.spotlights = new Array(4);
         this.toggleLights = [false, false, false, false];
+        //this.toggleLights = [true, true, true, true];
+
     }
 
     createScene() {
         'use strict';
 
         this.scene = new THREE.Scene();
+
+        this.sun = new THREE.DirectionalLight();
+        this.scene.add(this.sun);
 
         this.airplane = new AirPlane(0, 0, 0);
         this.scene.add(this.airplane);
@@ -65,16 +70,16 @@ class Game {
         'use strict';
 
         switch (e.keyCode) {
-            case 37:
+            case 37: //left
                 this.airplaneRoll = -2;
                 break;
-            case 39:
+            case 39: //right
                 this.airplaneRoll = 2;
                 break;
-            case 38:
+            case 38: //up
                 this.airplanePitch = 2;
                 break;
-            case 40:
+            case 40: //down
                 this.airplanePitch = -2;
                 break;
 
@@ -90,8 +95,9 @@ class Game {
             case 52: //4
                 this.toggleLights[3] = true;
                 break;
-            
 
+            case 78: //n
+                this.sun.intensity = this.sun.intensity == 1 ? 0 : 1;
             default:
                 break;
         }

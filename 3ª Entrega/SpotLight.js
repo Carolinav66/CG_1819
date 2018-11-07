@@ -3,8 +3,11 @@ class SpotLight extends GraphicEntity {
         'use strict';
 
         super(x, y, z,
-            new THREE.MeshBasicMaterial({color: 0xffff00}),
+            [new THREE.MeshBasicMaterial({color: 0xffffff}),
+             new THREE.MeshBasicMaterial({color: 0x777777})],
             "spotlight");
+
+        this.on = false;
 
         this.addSpotLightBase(0, 0, 0);
         this.addBulb(0, 0, 0);
@@ -14,7 +17,14 @@ class SpotLight extends GraphicEntity {
     }
 
     toggleLight() {
-        this.light.intensity = this.light.intensity ? 0 : 1
+        if (this.on) {
+            this.light.intensity = 0
+            this.BulbMesh.material = this.materials[1];
+        } else {
+            this.light.intensity = 1
+            this.BulbMesh.material = this.materials[0];
+        }
+        this.on = !this.on;
     }
 
     addSpotLightBase(x, y, z) {
@@ -31,10 +41,10 @@ class SpotLight extends GraphicEntity {
         'use strict';
 
         var geometry = new THREE.SphereGeometry(1, 10, 10);
-        var material = new THREE.MeshBasicMaterial({color: 0xffffff});
-        var mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(x, y, z);
-        this.add(mesh);
+        var material = this.materials[0];
+        this.BulbMesh = new THREE.Mesh(geometry, material);
+        this.BulbMesh.position.set(x, y, z);
+        this.add(this.BulbMesh);
     }
 
 }

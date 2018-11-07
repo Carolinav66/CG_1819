@@ -4,9 +4,9 @@ class AirPlane extends GraphicEntity {
 
         super(x, y, z,
             [new THREE.MeshLambertMaterial({color: 0x263b47 /*0xff09e5*/, wireframe: false, emissive: 0x000000}),
-            new THREE.MeshBasicMaterial({ color: 0xff09e5, wireframe: false, side: THREE.DoubleSide }),
-            new THREE.MeshBasicMaterial({ color: 0x99aaff, wireframe: false, opacity: 0.5, transparent: true , side: THREE.DoubleSide }),
-            new THREE.MeshBasicMaterial({ color: 0x404040, wireframe: false})],
+            new THREE.MeshLambertMaterial({ color: 0xff09e5, wireframe: false, side: THREE.DoubleSide }),
+            new THREE.MeshLambertMaterial({ color: 0x99aaff, wireframe: false, opacity: 0.5, transparent: true , side: THREE.DoubleSide }),
+            new THREE.MeshLambertMaterial({ color: 0x404040, wireframe: false})],
             "airplane");
 
         this.createChassis(0,0,-15);
