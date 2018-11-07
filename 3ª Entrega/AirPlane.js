@@ -26,6 +26,9 @@ class AirPlane extends GraphicEntity {
 
         this.windShield = this.createWindShield(0, 1, -2, 3, 2*Math.PI, Math.PI, 15, 15);
 
+        this.baseMesh;
+        this.paddle1Mesh;
+        this.paddle2Mesh;
         this.createRotor(0, 0, 5);
 
         this.add(new THREE.AxisHelper(15));
@@ -47,6 +50,9 @@ class AirPlane extends GraphicEntity {
             this.rearRightWing.material= this.materials[6];
             this.topStablizer.material = this.materials[6];
             this.windShield.material   = this.materials[5];
+            this.baseMesh.material     = this.materials[7];
+            this.paddle1Mesh.material  = this.materials[7];
+            this.paddle2Mesh.material  = this.materials[7];
         } else {
             this.lambertActivated = true;
             this.chassisMesh.material  = this.materials[0];
@@ -56,6 +62,10 @@ class AirPlane extends GraphicEntity {
             this.rearRightWing.material= this.materials[2];
             this.topStablizer.material = this.materials[2];
             this.windShield.material   = this.materials[1];
+            this.baseMesh.material     = this.materials[3];
+            this.paddle1Mesh.material  = this.materials[3];
+            this.paddle2Mesh.material  = this.materials[3];
+
         }
     }
 
@@ -308,12 +318,12 @@ class AirPlane extends GraphicEntity {
         var baseGeometry = this.createCustomCylinder(x,y,z, radii,16);
         baseGeometry.computeFaceNormals();
         baseGeometry.computeVertexNormals();
-        var baseMesh = new THREE.Mesh(baseGeometry, this.materials[3]);
-        baseMesh.name = "base";
-        this.add(baseMesh);
+        this.baseMesh = new THREE.Mesh(baseGeometry, this.materials[3]);
+        this.baseMesh.name = "base";
+        this.add(this.baseMesh);
 
         var paddleGeometry=new THREE.Geometry();
-        //rotor.add(baseMesh);
+        //rotor.add(this.baseMesh);
 
         paddleGeometry.vertices.push(new THREE.Vector3(0,0,0));
         for(var i=1; i<5; i++){
