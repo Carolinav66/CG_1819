@@ -13,6 +13,8 @@ class Game {
         this.spotlights = new Array(4);
         this.toggleLights = [false, false, false, false];
         this.materials = new Array(6);
+
+        this.toggleBasic = false;
         this.toggleMaterials = false;
 
     } 
@@ -100,17 +102,15 @@ class Game {
 
             case 78: //n
                 this.sun.intensity = this.sun.intensity == 1 ? 0 : 1;
-            default:
-                break;
-
             case 71: //g
-                console.log(this.airplane);
-                break;
-            
-            case 76: //l
                 this.toggleMaterials = true;
                 break;
-        }
+            case 76: //l
+                this.toggleBasic = true;
+                break;
+            default:
+                break;
+            }
     }
     onKeyUp(e) {
         'use strict';
@@ -182,8 +182,13 @@ class Game {
         }
 
         if(this.toggleMaterials) {
-            this.airplane.toggleMaterials();
+            this.airplane.toggleMaterial();
             this.toggleMaterials = false;
+        }
+
+        if(this.toggleBasic) {
+            this.airplane.toggleBasic();
+            this.toggleBasic = false;
         }
 
         var delta = this.clock.getDelta();
