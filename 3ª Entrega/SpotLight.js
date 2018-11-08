@@ -40,7 +40,7 @@ class SpotLight extends GraphicEntity {
     addBulb(x, y, z) {
         'use strict';
 
-        var geometry = new THREE.SphereGeometry(1, 10, 10);
+        var geometry = new THREE.SphereGeometry(1.5, 10, 10);
         var material = this.materials[0];
         this.BulbMesh = new THREE.Mesh(geometry, material);
         this.BulbMesh.position.set(x, y, z);

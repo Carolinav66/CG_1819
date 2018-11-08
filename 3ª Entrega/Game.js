@@ -5,7 +5,7 @@ class Game {
         this.clock = new THREE.Clock();
         this.clock.start();
 
-        this.camaraPos = [50, 50, 50];
+        this.camaraPos = [85, 50, 20];
 
         this.airplaneRoll = 0;
         this.airplanePitch = 0;
@@ -161,11 +161,11 @@ class Game {
 
         this.createScene();
         this.createCamera();
-        this.controls = new THREE.OrbitControls(this.camera);
+        //this.controls = new THREE.OrbitControls(this.camera);
 
         this.onResize();
         this.render();
-        this.controls.update();
+        //this.controls.update();
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
         window.addEventListener("resize", this.onResize.bind(this));
@@ -196,7 +196,7 @@ class Game {
         this.airplane.roll(delta, this.airplaneRoll);
         this.airplane.pitch(delta, this.airplanePitch);
 
-        this.controls.update();
+        //this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
     }
