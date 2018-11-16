@@ -23,6 +23,10 @@ class GraphicEntity extends THREE.Object3D {
         this.position.z += vector.z * delta;
     }
 
+    addMaterial(material){
+        this.materials.push(material);
+    }
+
     createCustomCylinder(x,y,z,radii,radialSegments){
         var geometry = new THREE.Geometry();
         for (var i = 0; i<radii.length; i++){
