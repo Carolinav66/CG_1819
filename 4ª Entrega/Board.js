@@ -6,11 +6,15 @@ class Board extends GraphicEntity{
     }
 
     addBoard(){
-        var geometry = new THREE.BoxGeometry(40,40,0.1,20,20);
+        var geometry = new THREE.BoxGeometry(40,1,40,20,20);
         var loader = new THREE.TextureLoader()
-        var textures = new Array(6);
+        var materials = new Array(6);
         for(var i = 0; i<6; i++){
-            texture[i] = loader.load("Textures/Face"+(i+1).toString()+".png")
+            var texture = loader.load("Textures/Board.png");
+            var bumptexture = loader.load("Textures/BoardBumpMap2.png");
+            materials[i] = new THREE.MeshPhongMaterial({ color: 0xffffff, specular:0x010101, map:texture, bumpMap:bumptexture});
         }
+        this.boardMesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+        this.add(this.boardMesh);
     }
 }

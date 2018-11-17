@@ -12,7 +12,7 @@ class Game {
         this.aspect = [window.innerWidth, window.innerHeight];
         this.ratio = window.innerWidth / window.innerHeight;
 
-        this.camaraPos = [0, 15, 15];
+        this.camaraPos = [0, 50, 50];
 
         this.lightPosition=0;
 
@@ -26,12 +26,17 @@ class Game {
         this.pointLight.position.y = 0;
         this.pointLight.position.x = 50;
         this.pointLight.position.z = 50;
-        this.scene.add(new THREE.PointLightHelper(this.pointLight),0.1);
+        this.scene.add(new THREE.PointLightHelper(this.pointLight));
         this.scene.add(this.pointLight);
         this.scene.add(this.ambientLight);
 
-        this.rubik = new Rubik(0,0,0);
+        this.rubik = new Rubik(0,5,0);
         this.scene.add(this.rubik);
+        this.ball = new Ball(5,5,0);
+        this.scene.add(this.ball);
+
+        this.board =new Board(0,-0.05,0);
+        this.scene.add(this.board);
 
         var axis = new THREE.AxisHelper(5);
         this.scene.add(axis);
@@ -202,8 +207,8 @@ class Game {
         var delta = this.clock.getDelta();
 
         this.lightPosition = (this.lightPosition + delta) % (Math.PI*2);
-        this.pointLight.position.x = Math.cos(this.lightPosition);
-        this.pointLight.position.z = Math.sin(this.lightPosition);
+        this.pointLight.position.x = 15 * Math.cos(this.lightPosition);
+        this.pointLight.position.z = 15*Math.sin(this.lightPosition);
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
