@@ -1,8 +1,8 @@
-class Board extends GraphicEntity{
-    constructor(x,y,z){
-        super(x,y,z,[],"Board")
+class Board extends GraphicEntity {
+    constructor(x, y, z) {
+        super(x, y, z, [], "Board");
 
-        this.addBoard()
+        this.addBoard();
     }
 
     addBoard(){
@@ -23,4 +23,5 @@ class Board extends GraphicEntity{
         this.boardMesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
         this.add(this.boardMesh);
     }
+   
 }
