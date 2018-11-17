@@ -3,6 +3,11 @@ class Ball extends GraphicEntity{
         super(x,y,z,[],"Ball")
 
         this.addBall()
+        this.ballState = new BallStateStopped(this,0,0);
+    }
+
+    setState(state){
+        this.ballState=state;
     }
 
     addBall(){
@@ -13,5 +18,19 @@ class Ball extends GraphicEntity{
         var material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular:0x0a0a0a, map:texture, shininess:100});
         this.ballMesh = new THREE.Mesh(geometry, material);
         this.add(this.ballMesh);
+    }
+
+    startBall(){
+        this.ballState.startBall();
+        console.log("ball is started");
+    }
+
+    stopBall(){
+        this.ballState.stopBall();
+        console.log("ball is stopped")
+    }
+
+    updateBall(delta){
+        this.ballState.moveBall(delta);
     }
 }

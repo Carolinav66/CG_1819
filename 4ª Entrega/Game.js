@@ -21,18 +21,18 @@ class Game {
     createScene() {
         'use strict';
         this.scene = new THREE.Scene();
-        this.ambientLight = new THREE.AmbientLight();
+        this.ambientLight = new THREE.AmbientLight(0xffffff,0.5);
         this.pointLight = new THREE.PointLight();
-        this.pointLight.position.y = 0;
+        this.pointLight.position.y = 10;
         this.pointLight.position.x = 50;
         this.pointLight.position.z = 50;
         this.scene.add(new THREE.PointLightHelper(this.pointLight));
         this.scene.add(this.pointLight);
         this.scene.add(this.ambientLight);
 
-        this.rubik = new Rubik(0,5,0);
+        this.rubik = new Rubik(0,3,0);
         this.scene.add(this.rubik);
-        this.ball = new Ball(5,5,0);
+        this.ball = new Ball(10,3,0);
         this.scene.add(this.ball);
 
         this.board =new Board(0,-0.05,0);
@@ -83,10 +83,12 @@ class Game {
         switch (e.keyCode) {
             case 65:  //A
             case 97: //a
+                this.ball.startBall();
                 break;
 
             case 68:  //D
             case 100: //d
+                this.ball.stopBall();
                 break;
 
             case 87:  //W
@@ -206,9 +208,10 @@ class Game {
 
         var delta = this.clock.getDelta();
 
+        this.ball.updateBall(delta);
         this.lightPosition = (this.lightPosition + delta) % (Math.PI*2);
-        this.pointLight.position.x = 15 * Math.cos(this.lightPosition);
-        this.pointLight.position.z = 15*Math.sin(this.lightPosition);
+        this.pointLight.position.x = 25 * Math.cos(this.lightPosition);
+        this.pointLight.position.z = 0*Math.sin(this.lightPosition);
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
