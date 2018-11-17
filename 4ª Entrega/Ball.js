@@ -18,6 +18,7 @@ class Ball extends GraphicEntity{
         var material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular:0x0a0a0a, map:texture, shininess:100});
         this.ballMesh = new THREE.Mesh(geometry, material);
         this.add(this.ballMesh);
+        this.add(new THREE.AxisHelper(5));
     }
 
     startBall(){

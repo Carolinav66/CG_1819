@@ -5,8 +5,8 @@ class BallStateAccelerating extends BallState{
 
     moveBall(delta){
         this.updateBall(delta);
-        this.speed+=delta*0.1
-        if (this.speed>=0.1){
+        this.speed+=delta*1
+        if (this.speed>=0.3){
             this.ball.setState(new BallStateFullspeed(this.ball,this.speed,this.position));
         }
     }
