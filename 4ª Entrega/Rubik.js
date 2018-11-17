@@ -1,12 +1,12 @@
-class Rubik extends GraphicEntity{
-    constructor(x,y,z){
-        super(x,y,z,[],"Rubik")
+class Rubik extends GraphicEntity {
+    constructor(x,y,z) {
+        super(x, y, z, [], "Rubik");
 
-        this.addRubik()
+        this.addRubik();
     }
 
-    addRubik(){
-        var geometry = new THREE.BoxGeometry(5,5,5,5,5);
+    addRubik() {
+        var geometry = new THREE.BoxGeometry(5, 5, 5, 5, 5);
         var loader = new THREE.TextureLoader();
         // var textures = new Array(6);
         var materials = new Array(6);

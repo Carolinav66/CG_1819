@@ -81,7 +81,7 @@ class Game {
         'use strict';
 
         switch (e.keyCode) {
-            case 65:  //A
+            case 65: //A
             case 97: //a
                 break;
 
@@ -97,7 +97,7 @@ class Game {
             case 115: //s
                 break;
 
-            case 49: //1
+            case 49:  //1
                 break;
 
             // case 50: //2
@@ -113,7 +113,7 @@ class Game {
         'use strict';
 
         switch (e.keyCode) {
-            case 65:  //A
+            case 65: //A
             case 97: //a
                 break;
 
@@ -149,14 +149,14 @@ class Game {
             var windowRatio = window.innerWidth / window.innerHeight;
 
             if(windowRatio > this.orthoCameraAspectRatio) {
-                this.camera.left = -this.orthoCameraHeight * windowRatio / 2;
-                this.camera.right = this.orthoCameraHeight * windowRatio / 2;
-                this.camera.top = this.orthoCameraHeight / 2;
-                this.camera.bottom = -this.orthoCameraHeight / 2;
+                this.camera.left   =  -this.orthoCameraHeight * windowRatio / 2;
+                this.camera.right  =   this.orthoCameraHeight * windowRatio / 2;
+                this.camera.top    =   this.orthoCameraHeight / 2;
+                this.camera.bottom =  -this.orthoCameraHeight / 2;
             } else {
-                this.camera.left = -this.orthoCameraWidth / 2;
-                this.camera.right = this.orthoCameraWidth / 2;
-                this.camera.top = (this.orthoCameraWidth / windowRatio) / 2;
+                this.camera.left   =  -this.orthoCameraWidth / 2;
+                this.camera.right  =   this.orthoCameraWidth / 2;
+                this.camera.top    =  (this.orthoCameraWidth / windowRatio) / 2;
                 this.camera.bottom = -(this.orthoCameraWidth / windowRatio) / 2;
             }
             this.camera.updateProjectionMatrix();
@@ -197,8 +197,8 @@ class Game {
         this.render();
         this.controls.update();
         window.addEventListener("keydown", this.onKeyDown.bind(this));
-        window.addEventListener("keyup", this.onKeyUp.bind(this));
-        window.addEventListener("resize", this.onResize.bind(this));
+        window.addEventListener("keyup",   this.onKeyUp.bind(this));
+        window.addEventListener("resize",  this.onResize.bind(this));
     }
 
     animate() {
