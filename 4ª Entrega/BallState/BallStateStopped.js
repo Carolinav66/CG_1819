@@ -7,9 +7,7 @@ class BallStateStopped extends BallState{
         this.speed=0;
     }
 
-    stopBall(){}
-
-    startBall(){
+    changeMovement(){
         this.ball.setState(new BallStateAccelerating(this.ball,this.speed,this.position));
     }
 }

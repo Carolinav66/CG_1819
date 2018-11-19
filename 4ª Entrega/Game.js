@@ -14,35 +14,28 @@ class Game {
 
         this.camaraPos = [0, 50, 50];
 
-        this.lightPosition = 0;
+        this.lightPosition=0;
 
     }
 
     createScene() {
         'use strict';
-
         this.scene = new THREE.Scene();
-
-        //this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        //this.scene.add(this.ambientLight);
-
+        this.ambientLight = new THREE.AmbientLight(0xffffff,0.5);
         this.pointLight = new THREE.PointLight();
         this.pointLight.position.y = 10;
         this.pointLight.position.x = 50;
         this.pointLight.position.z = 50;
-        this.scene.add(new THREE.PointLightHelper(this.pointLight));
+        this.scene.add(new THREE.PointLightHelper(this.pointLight,1));
         this.scene.add(this.pointLight);
+        this.scene.add(this.ambientLight);
 
-        this.diretionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        this.scene.add(this.diretionalLight);
-        this.diretionalLight.position.set(0.5, 1, 1);
-
-        this.rubik = new Rubik(0, 3, 0);
+        this.rubik = new Rubik(0,3,0);
         this.scene.add(this.rubik);
-        this.ball = new Ball(10, 3, 0);
+        this.ball = new Ball(10,3,0);
         this.scene.add(this.ball);
 
-        this.board = new Board(0, -0.05, 0);
+        this.board =new Board(0,-0.05,0);
         this.scene.add(this.board);
 
         var axis = new THREE.AxisHelper(5);
@@ -88,24 +81,20 @@ class Game {
         'use strict';
 
         switch (e.keyCode) {
-            case 65: //A
-            case 97: //a
-                this.ball.startBall();
+            case 66: //B
+            case 98: //b
+                this.ball.changeMovement();
                 break;
 
             case 68:  //D
             case 100: //d
-                this.diretionalLight.intensity = this.diretionalLight.intensity == 1 ? 0 : 1;
                 break;
 
-            case 80:  //P
-            case 112: //p
-                this.pointLight.intensity = this.pointLight.intensity == 1 ? 0 : 1;
-                break;
-            
             case 87:  //W
             case 119: //w
-                //this.ball.stopBall();
+                this.ball.toggleWireframe();
+                this.rubik.toggleWireframe();
+                this.board.toggleWireframe();
                 break;
 
             case 83:  //S
@@ -183,7 +172,9 @@ class Game {
 
             if (window.innerHeight > 0 && window.innerWidth > 0) {
                 this.camera.aspect = window.innerWidth / window.innerHeight;
-                this.camera.updateProjectionMatrix();
+                this.camera.updateP
+        this.ball.ballMesh.rotation.y=this.position;
+        this.ball.ballMesh.rotation.x=this.position;rojectionMatrix();
             }
         }
     }
@@ -222,11 +213,9 @@ class Game {
         var delta = this.clock.getDelta();
 
         this.ball.updateBall(delta);
-        
         this.lightPosition = (this.lightPosition + delta) % (Math.PI*2);
         this.pointLight.position.x = 25 * Math.cos(this.lightPosition);
-        this.pointLight.position.z =  0 * Math.sin(this.lightPosition);
-
+        this.pointLight.position.z = 15 * Math.sin(this.lightPosition);
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );

@@ -5,12 +5,11 @@ class BallStateFullspeed extends BallState{
 
     moveBall(delta){
         this.updateBall(delta);
-        this.speed=0.3
+        this.speed=2.5;
     }
 
-    stopBall(){
+    changeMovement(){
         this.ball.setState(new BallStateDecelerating(this.ball,this.speed,this.position));
     }
 
-    startBall(){}
 }

@@ -11,9 +11,10 @@ class BallState{
         this.ball.position.x=10*Math.cos(this.position);
         this.ball.position.z=10*Math.sin(this.position);
         this.ball.rotation.y=-this.position;
+        this.ball.ballMesh.rotation.y=this.position;
+        this.ball.ballMesh.rotation.x+=this.speed*delta*2*Math.PI;
     }
     moveBall(delta){}
 
-    stopBall(){}
-    startBall(){}
+    changeMovement(){}
 }

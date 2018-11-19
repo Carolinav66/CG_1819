@@ -4,6 +4,7 @@ class Ball extends GraphicEntity{
 
         this.addBall()
         this.ballState = new BallStateStopped(this,0,0);
+        this.wireframe=false;
     }
 
     setState(state){
@@ -11,27 +12,28 @@ class Ball extends GraphicEntity{
     }
 
     addBall(){
-        var geometry = new THREE.SphereGeometry(2.5,100,100);
+        var geometry = new THREE.SphereGeometry(2.5,10,10);
         var loader = new THREE.TextureLoader();
         // var textures = new Array(6);
         var texture = loader.load("Textures/Ball.png");
-        var material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular:0x0a0a0a, map:texture, shininess:100});
+        var material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, specular:0x1a1a1a, map:texture, shininess:100});
         this.ballMesh = new THREE.Mesh(geometry, material);
         this.add(this.ballMesh);
         this.add(new THREE.AxisHelper(5));
     }
 
-    startBall(){
-        this.ballState.startBall();
+    changeMovement(){
+        this.ballState.changeMovement();
         console.log("ball is started");
-    }
-
-    stopBall(){
-        this.ballState.stopBall();
-        console.log("ball is stopped")
     }
 
     updateBall(delta){
         this.ballState.moveBall(delta);
+    }
+
+    toggleWireframe(){
+        console.log(this.wireframe+" is thing");
+        this.wireframe = !this.wireframe;
+        this.ballMesh.material.wireframe=this.wireframe;
     }
 }
