@@ -13,6 +13,7 @@ class Game {
         this.ratio = window.innerWidth / window.innerHeight;
 
         this.camaraPos = [0, 50, 50];
+        this.toggleMaterials = false;
 
     }
 
@@ -107,6 +108,11 @@ class Game {
                 this.ball.toggleWireframe();
                 this.rubik.toggleWireframe();
                 this.board.toggleWireframe();
+                break;
+
+            case 76:  //L
+            case 108: //l
+                this.toggleMaterials = true;
                 break;
 
             case 83:  //S
@@ -223,6 +229,13 @@ class Game {
         'use strict';
 
         var delta = this.clock.getDelta();
+
+        if(this.toggleMaterials) {
+            this.ball.toggleMaterials();
+            this.board.toggleMaterials();
+            this.rubik.toggleMaterials();
+            this.toggleMaterials = false;
+        }
 
         this.ball.updateBall(delta);
         this.controls.update();
