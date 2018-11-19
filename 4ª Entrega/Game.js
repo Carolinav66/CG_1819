@@ -14,22 +14,21 @@ class Game {
 
         this.camaraPos = [0, 50, 50];
 
-        this.lightPosition=0;
-
     }
 
     createScene() {
         'use strict';
 
         this.scene = new THREE.Scene();
-        
+
         // this.ambientLight = new THREE.AmbientLight(0xffffff,0.5);
         // this.scene.add(this.ambientLight);
-        
+
         this.pointLight = new THREE.PointLight();
         this.pointLight.position.y = 10;
-        this.pointLight.position.x = 50;
-        this.pointLight.position.z = 50;
+        var random = Math.random() * 2 * Math.PI;
+        this.pointLight.position.x = 15 * Math.cos(random);
+        this.pointLight.position.z = 10 * Math.sin(random);
         this.scene.add(new THREE.PointLightHelper(this.pointLight,1));
         this.scene.add(this.pointLight);
 
@@ -102,7 +101,7 @@ class Game {
             case 112: //p
                 this.pointLight.intensity = this.pointLight.intensity == 1 ? 0 : 1;
                 break;
-                
+
             case 87:  //W
             case 119: //w
                 this.ball.toggleWireframe();
@@ -226,9 +225,6 @@ class Game {
         var delta = this.clock.getDelta();
 
         this.ball.updateBall(delta);
-        this.lightPosition = (this.lightPosition + delta) % (Math.PI*2);
-        this.pointLight.position.x = 25 * Math.cos(this.lightPosition);
-        this.pointLight.position.z = 15 * Math.sin(this.lightPosition);
         this.controls.update();
         this.render();
         requestAnimationFrame( this.animate.bind(this) );
