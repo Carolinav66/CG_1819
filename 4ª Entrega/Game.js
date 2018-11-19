@@ -117,6 +117,7 @@ class Game {
 
             case 83:  //S
             case 115: //s
+                this.clock.running ? this.clock.stop() : this.clock.start();
                 break;
 
             case 49:  //1
@@ -228,7 +229,11 @@ class Game {
     animate() {
         'use strict';
 
-        var delta = this.clock.getDelta();
+        if (this.clock.running) {
+            var delta = this.clock.getDelta();
+        } else {
+            var delta = 0;
+        }
 
         if(this.toggleMaterials) {
             this.ball.toggleMaterials();
