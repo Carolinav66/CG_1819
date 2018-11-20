@@ -21,8 +21,10 @@ class Ball extends GraphicEntity {
         this.materials[1] = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, map: texture});
         this.materials[1].name = "basic";
         this.ballMesh = new THREE.Mesh(geometry, this.materials[0]);
+        this.ballMesh.castShadow = true;
+        this.ballMesh.receiveShadow = true;
         this.add(this.ballMesh);
-        this.add(new THREE.AxisHelper(5));
+        //his.add(new THREE.AxisHelper(5));
     }
 
     toggleMaterials() {

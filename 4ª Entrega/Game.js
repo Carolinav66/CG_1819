@@ -28,17 +28,31 @@ class Game {
         // this.ambientLight = new THREE.AmbientLight(0xffffff,0.5);
         // this.scene.add(this.ambientLight);
 
-        this.pointLight = new THREE.PointLight(0xeeeeff);
-        this.pointLight.position.y = 10;
         var random = Math.random() * 2 * Math.PI;
+
+        this.pointLight = new THREE.PointLight(0xeeeeff);
+        this.pointLight.position.y = 15;
         this.pointLight.position.x = 15 * Math.cos(random);
         this.pointLight.position.z = 10 * Math.sin(random);
-        this.scene.add(new THREE.PointLightHelper(this.pointLight, 1));
+        this.pointLight.castShadow = true;
+        //this.scene.add(new THREE.PointLightHelper(this.pointLight, 1));
         this.scene.add(this.pointLight);
+    
+        this.pointLight.shadow.mapSize.width = 1024;
+        this.pointLight.shadow.mapSize.height = 1024;
+        this.pointLight.shadow.bias = 0.0005; 
 
         this.diretionalLight = new THREE.DirectionalLight(0xaa55ff, this.D_LIGHT_INTENSITY);
         this.scene.add(this.diretionalLight);
         this.diretionalLight.position.set(0.5, 1, 1);
+        this.diretionalLight.castShadow = true;
+
+        this.diretionalLight.shadow.camera.near = -20;
+        this.diretionalLight.shadow.camera.far = 20;
+        this.diretionalLight.shadow.camera.left = -20;
+        this.diretionalLight.shadow.camera.right = 20;
+        this.diretionalLight.shadow.camera.top = 20;
+        this.diretionalLight.shadow.camera.bottom = -20;
 
         this.rubik = new Rubik(0, 3, 0);
         this.scene.add(this.rubik);
@@ -48,8 +62,8 @@ class Game {
         this.board = new Board(0, 0.5, 0);
         this.scene.add(this.board);
 
-        var axis = new THREE.AxisHelper(5);
-        this.scene.add(axis);
+        //var axis = new THREE.AxisHelper(5);
+        //this.scene.add(axis);
     }
 
     createPauseScene() {
@@ -101,6 +115,7 @@ class Game {
             case 115: //s
                 this.clock.start();
                 this.paused = false;
+                this.onResize();
                 this.toggleEventListeners();
                 break;
 
@@ -152,6 +167,7 @@ class Game {
             case 115: //s
                 this.clock.stop();
                 this.paused = true;
+                this.onResize();
                 this.toggleEventListeners();
                 break;
 
@@ -205,9 +221,11 @@ class Game {
 
         this.renderer.setSize(window.innerWidth, window.innerHeight);
 
+        var camera = this.paused ? this.pauseScreenCamera : this.camera;
+
         if (window.innerHeight > 0 && window.innerWidth > 0) {
-            this.camera.aspect = window.innerWidth / window.innerHeight;
-            this.camera.updateProjectionMatrix();
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
         }
     }
 
@@ -232,6 +250,9 @@ class Game {
         this.pauseScreenCamera = this.createCamera(this.pauseScene, [0, 0, 100]);
 
         this.controls = new THREE.OrbitControls( this.camera );
+
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         this.onResize();
         this.render(this.scene, this.camera);

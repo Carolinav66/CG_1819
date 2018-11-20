@@ -25,7 +25,9 @@ class Rubik extends GraphicEntity {
             this.cubeMeshes[i].phongMaterial = this.cubeMeshes[i].material;
             this.cubeMeshes[i].phongMaterial.name = "phong";
             this.cubeMeshes[i].basicMaterial = new THREE.MeshBasicMaterial({ color:0xaaaaaa, map:texture});
-            this.cubeMeshes[i].basicMaterial.name = "basic";            
+            this.cubeMeshes[i].basicMaterial.name = "basic";      
+            this.cubeMeshes[i].castShadow = true;
+            this.cubeMeshes[i].receiveShadow = true;
             this.add(this.cubeMeshes[i]);
         }
         this.cubeMeshes[0].position.x += 2.5;

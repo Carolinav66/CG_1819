@@ -16,6 +16,7 @@ class Board extends GraphicEntity {
         var geometry = new THREE.PlaneGeometry(40, 40, 20, 20);
         this.boardMesh = new THREE.Mesh(geometry, this.materials[0]);
         this.boardMesh.rotation.x -= Math.PI/2;
+        this.boardMesh.receiveShadow = true;
         this.add(this.boardMesh);
     }
 
