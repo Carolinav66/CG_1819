@@ -15,6 +15,8 @@ class Game {
         this.camaraPos = [0, 50, 50];
         this.toggleMaterials = false;
 
+        this.D_LIGHT_INTENSITY = 0.75;
+        this.paused = false;
     }
 
     createScene() {
@@ -25,15 +27,15 @@ class Game {
         // this.ambientLight = new THREE.AmbientLight(0xffffff,0.5);
         // this.scene.add(this.ambientLight);
 
-        this.pointLight = new THREE.PointLight();
+        this.pointLight = new THREE.PointLight(0xeeeeff);
         this.pointLight.position.y = 10;
         var random = Math.random() * 2 * Math.PI;
         this.pointLight.position.x = 15 * Math.cos(random);
         this.pointLight.position.z = 10 * Math.sin(random);
-        this.scene.add(new THREE.PointLightHelper(this.pointLight,1));
+        this.scene.add(new THREE.PointLightHelper(this.pointLight, 1));
         this.scene.add(this.pointLight);
 
-        this.diretionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        this.diretionalLight = new THREE.DirectionalLight(0xaa55ff, this.D_LIGHT_INTENSITY);
         this.scene.add(this.diretionalLight);
         this.diretionalLight.position.set(0.5, 1, 1);
 
@@ -47,7 +49,12 @@ class Game {
 
         var axis = new THREE.AxisHelper(5);
         this.scene.add(axis);
+    }
 
+    createPauseScene() {
+        this.pauseScene = new THREE.Scene();
+        this.pauseScreen = new PauseScreen(0, 0, 0);
+        this.pauseScene.add(this.pauseScreen);
     }
 
     // createCamera() {
@@ -68,19 +75,21 @@ class Game {
     //
     // }
 
-    createCamera() {
+    createCamera(scene, position) {
         'use strict';
 
 
-        this.camera = new THREE.PerspectiveCamera(20,
+        var camera = new THREE.PerspectiveCamera(20,
                                                   window.innerWidth / window.innerHeight,
                                                   1,
                                                   1000);
-        this.camera.position.x = this.camaraPos[0];
-        this.camera.position.y = this.camaraPos[1];
-        this.camera.position.z = this.camaraPos[2];
+        camera.position.x = position[0];
+        camera.position.y = position[1];
+        camera.position.z = position[2];
 
-        this.camera.lookAt(this.scene.position);
+        camera.lookAt(scene.position);
+
+        return camera;
     }
 
 
@@ -95,7 +104,7 @@ class Game {
 
             case 68:  //D
             case 100: //d
-                this.diretionalLight.intensity = this.diretionalLight.intensity == 1 ? 0 : 1;
+                this.diretionalLight.intensity = this.diretionalLight.intensity == this.D_LIGHT_INTENSITY ? 0 : this.D_LIGHT_INTENSITY;
                 break;
 
             case 80:  //P
@@ -118,6 +127,7 @@ class Game {
             case 83:  //S
             case 115: //s
                 this.clock.running ? this.clock.stop() : this.clock.start();
+                this.paused = !this.paused;
                 break;
 
             case 49:  //1
@@ -167,41 +177,18 @@ class Game {
     onResize() {
         'use strict';
 
-        if(this.cameraNumber == 1){
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            var windowRatio = window.innerWidth / window.innerHeight;
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-            if(windowRatio > this.orthoCameraAspectRatio) {
-                this.camera.left   =  -this.orthoCameraHeight * windowRatio / 2;
-                this.camera.right  =   this.orthoCameraHeight * windowRatio / 2;
-                this.camera.top    =   this.orthoCameraHeight / 2;
-                this.camera.bottom =  -this.orthoCameraHeight / 2;
-            } else {
-                this.camera.left   =  -this.orthoCameraWidth / 2;
-                this.camera.right  =   this.orthoCameraWidth / 2;
-                this.camera.top    =  (this.orthoCameraWidth / windowRatio) / 2;
-                this.camera.bottom = -(this.orthoCameraWidth / windowRatio) / 2;
-            }
+        if (window.innerHeight > 0 && window.innerWidth > 0) {
+            this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
-        }
-
-        if(this.cameraNumber == 2 || this.cameraNumber == 3) {
-
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-            if (window.innerHeight > 0 && window.innerWidth > 0) {
-                this.camera.aspect = window.innerWidth / window.innerHeight;
-                this.camera.updateP
-        this.ball.ballMesh.rotation.y=this.position;
-        this.ball.ballMesh.rotation.x=this.position;rojectionMatrix();
-            }
         }
     }
 
-    render() {
+    render(scene, camera) {
         'use strict';
 
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(scene, camera);
     }
 
     init() {
@@ -213,13 +200,15 @@ class Game {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.createScene();
-        this.createCamera(); //50, 50, 50
-        //this.createCamera2();
+        this.createPauseScene();
+
+        this.camera = this.createCamera(this.scene, this.camaraPos);
+        this.pauseScreenCamera = this.createCamera(this.pauseScene, [0, 0, 100]);
+
         this.controls = new THREE.OrbitControls( this.camera );
 
-
         this.onResize();
-        this.render();
+        this.render(this.scene, this.camera);
         this.controls.update();
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup",   this.onKeyUp.bind(this));
@@ -235,7 +224,7 @@ class Game {
             var delta = 0;
         }
 
-        if(this.toggleMaterials) {
+        if (this.toggleMaterials) {
             this.ball.toggleMaterials();
             this.board.toggleMaterials();
             this.rubik.toggleMaterials();
@@ -244,7 +233,12 @@ class Game {
 
         this.ball.updateBall(delta);
         this.controls.update();
-        this.render();
+
+        if (this.paused) {
+            this.render(this.pauseScene, this.pauseScreenCamera);
+        } else {
+            this.render(this.scene, this.camera);
+        }
         requestAnimationFrame( this.animate.bind(this) );
     }
 }
