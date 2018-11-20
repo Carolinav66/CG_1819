@@ -45,7 +45,7 @@ class Game {
         this.ball = new Ball(10, 3, 0);
         this.scene.add(this.ball);
 
-        this.board = new Board(0, -0.05, 0);
+        this.board = new Board(0, 0.5, 0);
         this.scene.add(this.board);
 
         var axis = new THREE.AxisHelper(5);
