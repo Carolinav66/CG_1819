@@ -289,8 +289,10 @@ class Game {
 
         if (this.paused) {
             this.render(this.pauseScene, this.pauseScreenCamera);
+            this.controls.enabled = false;
         } else {
             this.render(this.scene, this.camera);
+            this.controls.enabled = true;
         }
         requestAnimationFrame( this.animate.bind(this) );
     }
