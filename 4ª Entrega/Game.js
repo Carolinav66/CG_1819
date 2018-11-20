@@ -17,6 +17,7 @@ class Game {
 
         this.D_LIGHT_INTENSITY = 0.75;
         this.paused = false;
+        this.restart = false;
     }
 
     createScene() {
@@ -92,6 +93,29 @@ class Game {
         return camera;
     }
 
+    onKeyDownPaused(e) {
+        'use strict';
+
+        switch (e.keyCode) {
+            case 83:  //S
+            case 115: //s
+                this.clock.start();
+                this.paused = false;
+                this.toggleEventListeners();
+                break;
+
+            case 82:  //R
+            case 114: //r
+                this.restart = true;
+                this.clock.start();
+                this.paused = false;
+                this.toggleEventListeners();
+                break;
+
+            default:
+                break;
+        }
+    }
 
     onKeyDown(e) {
         'use strict';
@@ -126,8 +150,9 @@ class Game {
 
             case 83:  //S
             case 115: //s
-                this.clock.running ? this.clock.stop() : this.clock.start();
-                this.paused = !this.paused;
+                this.clock.stop();
+                this.paused = true;
+                this.toggleEventListeners();
                 break;
 
             case 49:  //1
@@ -142,6 +167,7 @@ class Game {
                 break;
         }
     }
+
     onKeyUp(e) {
         'use strict';
 
@@ -210,9 +236,31 @@ class Game {
         this.onResize();
         this.render(this.scene, this.camera);
         this.controls.update();
-        window.addEventListener("keydown", this.onKeyDown.bind(this));
-        window.addEventListener("keyup",   this.onKeyUp.bind(this));
+
+        this.onKeyDownEventListenerFunc = this.onKeyDown.bind(this);
+        this.onKeyDownPausedEventListenerFunc = this.onKeyDownPaused.bind(this);
+
+        window.addEventListener("keydown", this.onKeyDownEventListenerFunc);
+        //window.addEventListener("keyup",   this.onKeyUp.bind(this));
         window.addEventListener("resize",  this.onResize.bind(this));
+    }
+
+    toggleEventListeners() {
+        if(this.paused) {
+            console.log("oi");
+            window.removeEventListener("keydown", this.onKeyDownEventListenerFunc);
+            window.addEventListener("keydown", this.onKeyDownPausedEventListenerFunc);
+        } else {
+            console.log("hello");
+            window.removeEventListener("keydown", this.onKeyDownPausedEventListenerFunc);
+            window.addEventListener("keydown", this.onKeyDownEventListenerFunc);
+        }
+    }
+
+    restartGame() {
+        this.createScene();
+        this.camera = this.createCamera(this.scene, this.camaraPos);
+        this.controls = new THREE.OrbitControls( this.camera );
     }
 
     animate() {
@@ -233,6 +281,11 @@ class Game {
 
         this.ball.updateBall(delta);
         this.controls.update();
+
+        if(this.restart) {
+            this.restartGame();
+            this.restart = false;
+        }
 
         if (this.paused) {
             this.render(this.pauseScene, this.pauseScreenCamera);

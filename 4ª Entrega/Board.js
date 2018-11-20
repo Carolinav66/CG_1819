@@ -5,7 +5,7 @@ class Board extends GraphicEntity {
         var bumptexture = loader.load("Textures/BoardBumpMap2.png");
         var phongMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, specular:0x111111, map: texture, bumpMap: bumptexture});
         phongMaterial.name = "phong";     
-        var basicMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, map: texture, bumpMap: bumptexture});        
+        var basicMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, map: texture});        
         basicMaterial.name = "basic";             
         super(x, y, z, [phongMaterial, basicMaterial], "Board");
         this.addBoard();
