@@ -4,12 +4,12 @@ class AirPlane extends GraphicEntity {
 
         super(x, y, z,
             [new THREE.MeshLambertMaterial({ color: 0x263b47, wireframe: false}),
-             new THREE.MeshLambertMaterial({ color: 0x99aaff, wireframe: false, /*opacity: 0.5, transparent: true,*/ side: THREE.DoubleSide }),
+             new THREE.MeshLambertMaterial({ color: 0x99aaff, wireframe: false, /*opacity: 0.5, transparent: true, side: THREE.DoubleSide*/ }),
              new THREE.MeshLambertMaterial({ color: 0x404040, wireframe: false}),
              new THREE.MeshLambertMaterial({ color: 0x390022, wireframe: false, side:THREE.DoubleSide}),
 
              new THREE.MeshPhongMaterial({ color: 0x263b47, wireframe: false}),
-             new THREE.MeshPhongMaterial({ color: 0x99aaff, wireframe: false, /*opacity: 0.5, transparent: true,*/ side: THREE.DoubleSide }),
+             new THREE.MeshPhongMaterial({ color: 0x99aaff, wireframe: false, /*opacity: 0.5, transparent: true, side: THREE.DoubleSide*/ }),
              new THREE.MeshPhongMaterial({ color: 0x404040, wireframe: false}),
              new THREE.MeshPhongMaterial({ color: 0x390022, wireframe: false, side:THREE.DoubleSide}),             
         

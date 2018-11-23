@@ -33,6 +33,7 @@ class Board extends GraphicEntity {
         for(var i = 0; i < 6; i++){
             //console.log(this.boardMesh.material.materials[i]);
             this.materials[0].wireframe = this.wireframe;
+            this.materials[1].wireframe = this.wireframe;
         }
     }
 

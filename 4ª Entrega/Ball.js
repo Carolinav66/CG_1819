@@ -47,6 +47,8 @@ class Ball extends GraphicEntity {
     toggleWireframe() {
         console.log(this.wireframe+" is thing");
         this.wireframe = !this.wireframe;
-        this.ballMesh.material.wireframe = this.wireframe;
+        this.materials[0].wireframe = this.wireframe;
+        this.materials[1].wireframe = this.wireframe;
+
     }
 }

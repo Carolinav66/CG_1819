@@ -20,11 +20,12 @@ class Rubik extends GraphicEntity {
             texture.minFilter = THREE.LinearFilter;
             texture.magFilter = THREE.LinearFilter;
             //console.log("Textures/Face"+(i+1).toString()+".png");
-            materials[i] = new THREE.MeshPhongMaterial({ color:0xaaaaaa, map:texture, bumpMap:bumptexture});
-            this.cubeMeshes[i] = new THREE.Mesh(geometries[i], materials[i]);
+            this.materials[i*2] = new THREE.MeshPhongMaterial({ color:0xaaaaaa, map:texture, bumpMap:bumptexture});
+            this.materials[i*2 + 1] = new THREE.MeshBasicMaterial({ color:0xaaaaaa, map:texture});
+            this.cubeMeshes[i] = new THREE.Mesh(geometries[i], this.materials[i*2]);
             this.cubeMeshes[i].phongMaterial = this.cubeMeshes[i].material;
             this.cubeMeshes[i].phongMaterial.name = "phong";
-            this.cubeMeshes[i].basicMaterial = new THREE.MeshBasicMaterial({ color:0xaaaaaa, map:texture});
+            this.cubeMeshes[i].basicMaterial = this.materials[i*2 + 1];
             this.cubeMeshes[i].basicMaterial.name = "basic";      
             this.cubeMeshes[i].castShadow = true;
             this.cubeMeshes[i].receiveShadow = true;
@@ -60,9 +61,10 @@ class Rubik extends GraphicEntity {
 
     toggleWireframe() {
         this.wireframe = !this.wireframe;
-        for(var i = 0; i < 6; i++) {
+        for(var i = 0; i < 12; i++) {
             //console.log(this.cubeMesh.material.materials[i].wireframe);
-            this.cubeMeshes[i].material.wireframe = this.wireframe;
+            this.materials[i].wireframe = this.wireframe;
+
         }
     }
 }

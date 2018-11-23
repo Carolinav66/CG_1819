@@ -37,7 +37,7 @@ class Game {
                                                    -aspectConstant,
                                                     1,
                                                     1000);
-        this.camera.position.x = this.camaraPos[0];  
+        this.camera.position.x = this.camaraPos[0];
         this.camera.position.y = this.camaraPos[1];
         this.camera.position.z = this.camaraPos[2];
 
@@ -46,7 +46,7 @@ class Game {
     }
 
     changeCameraPosition() {
-        this.camera.position.x = this.camaraPos[0];  
+        this.camera.position.x = this.camaraPos[0];
         this.camera.position.y = this.camaraPos[1];
         this.camera.position.z = this.camaraPos[2];
 
